@@ -12,7 +12,7 @@
 				<div class="form-group">
 				<input type="text" name="password" placeholder="Password" class="form-control">
 				</div>
-				<span><a href="?url=seleksi/daftar">Belum terdaftar?</a></span>
+				<span><a href="?url=index/pendaftaran">Belum terdaftar?</a></span>
 				<!-- Form Buttons -->
 				<div class="buttons">
 				  <input type="submit" class="button" value="Login" />

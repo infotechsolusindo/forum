@@ -36,4 +36,34 @@ class Index_Controller extends Controller{
 		$this->Assign('content',' Donec id ....');
 	}
 
+	public function pendaftaran() {
+		$this->Load_View('pendaftaran');
+		if(isset($_GET['cmd'])=='save') {
+			$capaska = new Capaska();
+			if(
+				$capaska->setNama($_POST['nama'])&&
+				$capaska->setEmail($_POST['email'])&&
+				$capaska->setTelp($_POST['telp'])&&
+				$capaska->setPassword($_POST['password'])&&
+				$capaska->setKonfirmasi($_POST['konfirmasi'])&&
+				$capaska->verifyPassword()
+			){
+				$pendaftaran = new Pendaftaran($capaska);
+				$email = new Email();
+				$email->to($capaska->getEmail());
+				$email->subject('Panita Pendaftaran Capaska');
+				$body = "
+					<p>
+			<b>Selamat</b>, pendaftaran Anda berhasil. Dokumen pendaftaran Anda akan direview oleh Panitia Pendaftaran.<br>
+			Mohon bersabar, kami akan segera menghubungi via email jika kami review Pendaftaran Anda diterima.
+					</p>
+				";
+				$email->body($body);
+				$email->sendemail();
+			}
+			$this->Assign('errorMessage',$capaska->getErrors());
+			$this->Assign('capaska',$capaska);
+		}
+	}
+
 }

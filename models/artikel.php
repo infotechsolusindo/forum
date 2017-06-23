@@ -50,18 +50,19 @@ class Artikel extends Model implements IArtikel
 				"ORDER BY artikel.idkategori";
 		return $this->_db->Exec($sql);
 	}
-	public function daftarTerbaru($author=null){
-		$author = !isset($author)?$_SESSION['id']:$author;
+	public function daftarTerbaru($author=null,$limit=null){
+		$author = !isset($author)&&isset($_SESSION['id'])?$_SESSION['id']:$author;
 		$sql = "SELECT ". 
 			    "artikel.*,".
 				"artikelkategori.* ".
 				"FROM artikel ".
 				"INNER JOIN artikelkategori ON artikelkategori.idkategori = artikel.idkategori ".
-				"WHERE ".
-				"author = '$author' AND ".
-				"type = '00' AND ".
-				"artikel.status <> 'A' ".
-				"ORDER BY artikel.tgl DESC,artikel.jam DESC";
+				"WHERE ";
+		$sql .= ($author!="")?"author = '$author' AND ":"";
+		$sql .=	"type = '00' AND ".
+				"artikel.status = 'A' ".
+				"ORDER BY artikel.tgl DESC,artikel.jam DESC ";
+		$sql .= isset($limit)&&($limit>0)?"LIMIT $limit":"";
 		return $this->_db->Exec($sql);
 	}
 	public function getKategori(){

@@ -9,10 +9,8 @@ class ArtikelTerbaru
 	public $shortcontent;
 	function __construct()
 	{
+		$author = "";
 		$artikels = new Artikel;
-		
-		$this->title = "testing";
-		$this->img = "";
-		$this->shortcontent ="";
+		$this->artikels = $artikels->daftarTerbaru($author,5);
 	}
 }

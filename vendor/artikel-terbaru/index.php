@@ -12,74 +12,20 @@
 	<div class="panel-body">
 		<!-- Table -->
 		<ul>
+		<?php foreach ($data->artikels as $artikel) { ?>
 			<li class="list-group-item">
-				<h4><a href="#"><?php echo $data->title;?></a></h4>
+				<h4><a href="?url=artikel/index/<?php echo $artikel->idartikel; ?>"><?php echo $artikel->judul;?></a></h4>
 				<table style="width:100%;font-size: 10px">
 					<tr>
-						<td><img src="<?php echo $data->img;?>" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
+						<td><img src="<?php echo $artikel->thumbnail;?>" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
 						<td>
-							<p><?php echo $data->shortcontent;?></p>
-							<a href="?url=artikel/index/<?php ?>">Baca Selengkapnya</a>
+							<p><?php echo $artikel->isipendek;?></p>
+							<a href="?url=artikel/index/<?php echo $artikel->idartikel; ?>">Baca Selengkapnya</a>
 						</td>
 					</tr>
 				</table>	
 			</li>
-			<li class="list-group-item">
-				<h4><a href="#">Lorem ipsum dolor sit amet, consectetur.</a></h4>
-				<table style="width:100%;font-size: 10px">
-					<tr>
-						<td><img src="" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
-						<td>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.
-							</p>
-							<a href="">Baca Selengkapnya</a>
-						</td>
-					</tr>
-				</table>	
-			</li>
-			<li class="list-group-item">
-				<h4><a href="#">Lorem ipsum dolor sit amet, consectetur.</a></h4>
-				<table style="width:100%;font-size: 10px">
-					<tr>
-						<td><img src="" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
-						<td>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.
-							</p>
-							<a href="">Baca Selengkapnya</a>
-						</td>
-					</tr>
-				</table>	
-			</li>
-			<li class="list-group-item">
-				<h4><a href="#">Lorem ipsum dolor sit amet, consectetur.</a></h4>
-				<table style="width:100%;font-size: 10px">
-					<tr>
-						<td><img src="" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
-						<td>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.
-							</p>
-							<a href="">Baca Selengkapnya</a>
-						</td>
-					</tr>
-				</table>	
-			</li>
-			<li class="list-group-item">
-				<h4><a href="#">Lorem ipsum dolor sit amet, consectetur.</a></h4>
-				<table style="width:100%;font-size: 10px">
-					<tr>
-						<td><img src="" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
-						<td>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.Lorem ipsum dolor sit amet, consectetur.
-							</p>
-							<a href="">Baca Selengkapnya</a>
-						</td>
-					</tr>
-				</table>	
-			</li>
+		<?php } ?>
 		</ul>
 		<!-- Table -->
 	</div>
