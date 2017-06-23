@@ -1,0 +1,5 @@
+bck/
+tmp/logs/access_log
+tmp/logs/error_log
+tmp/logs/service_log
+config/config.php

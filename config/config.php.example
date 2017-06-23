@@ -1,0 +1,45 @@
+<?php
+/** Development Environment **/
+// when Set to false, no error will be throw out, but saved in temp/log.txt file.
+define ('DEVELOPMENT_ENVIRONMENT',false);		//Flag mode development
+							//true = mode debug diaktifkan
+							//false = mode debug dinonaktifkan
+
+/** Site Root **/
+// Domain name of the site (no slash at the end!)
+define('SITE_ROOT' , 'http://You domain name');		//Alamat domain/hosting dari aplikasi
+define ('DEFAULT_CONTROLLER', 'index');			//Default (jangan diubah)
+define ('DEFAULT_ACTION', 'index');			//Default (jangan diubah)
+
+//Time Zone
+define('TIME_ZONE','Asia/Jakarta');			//Timezone server
+
+//Database
+define('DB_ENGINE','Mysql');				//Database Engine Driver
+define('DB','DB_NAME');					//Nama Database
+define('USERNAME','DB_USER');				//Username Database
+define('PASSWORD','DB_PASSWORD');			//Password Database
+define('HOST','localhost');				//Host Database
+
+
+define('APP_NAME','APPLICATION_NAME');			//Nama Aplikasi
+define('APP_TITLE','APPLICATION_DESCRIPTION');		//Deskripsi Aplikasi
+define('PAGE_LENGTH',10);				//Default jumlah item per page
+
+//DIRECTORIES
+define('LIBRARY_PATH',ROOT . DS . 'library' . DS); 		//Library Directories
+define('CONTROLLER_PATH',ROOT . DS . 'controllers' . DS); 	//Controllers Directories
+define('MODEL_PATH',ROOT . DS . 'models' . DS); 		//Models Directories
+define('LIBRARY',ROOT . DS . 'library' . DS); 			//Library Directories
+define('MODULE',ROOT . DS . 'vendor' . DS);                     //Module Directories
+define('SPOOL_TIMEOUT',60);                                     //Set error too spooled process after 60 seconds
+
+//EMAIL CONFIG
+define('MAIL_FROM','email_pengirim@domainemail');	//Alamat email pengirim
+define('MAIL_FROM_DESC','nama_pengirim');		//Nama Pengirim
+define('MAIL_USERNAME','EMAIL_USERNAME');		//Username/LoginID email server
+define('MAIL_PASSWORD','EMAIL_PASSWORD');		//Password email server
+
+//Variable di bawah ini jangan dihapus!
+$path;
+$log_type;
