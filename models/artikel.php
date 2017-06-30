@@ -1,72 +1,61 @@
 <?php
-/**
-* 
-*/
-class Artikel extends Model implements IArtikel
+class Artikel extends Model 
 {
-	private $_author;
-	private $_type;
+	protected $kodeartikel;
+	protected $tanggal; /* tanggal posting */
+	protected $nra;
+	protected $judul;
+	protected $isi;
+	protected $gambar;
 
-	function __construct()
-	{
-        $database = DB_ENGINE;
-        $this->_db = new $database;
-        $this->_db->setTable('artikel','idartikel');
-        $this->setType();
+	protected $tipe;
+	protected $komens = [];
+	function __construct(){
+		$this->getSemuaKomen($this->kodeartikel);
 	}
-	protected function setType($type='000'){
-		$this->_type = $type;
+	public function setTanggal($tanggal){
+		$this->tanggal = $tanggal;
 	}
-	public function add(){
-
+	public function setNRA($nra){
+		$this->nra = $nra;
 	}
-	public function edit(){
-
+	public function setJudul($judul){
+		$this->judul = $judul;
 	}
-	public function remove(){
-
+	public function setIsi($isi){
+		$this->isi = $isi;
 	}
-	public function show($id){
-		$sql = "SELECT * FROM artikel WHERE idartikel = $id";
-		return $this->_db->Exec($sql);
+	public function setGambar($gambar){
+		$this->gambar = $gambar;
 	}
-	public function getAuthor(){
-
+	public function getTanggal(){
+		return $this->tanggal;
 	}
-	public function setAuthor($userid){
-		$this->_author = $userid;
+	public function getNRA(){
+		return $this->nra;
 	}
-	public function daftarArtikel($author=null){
-		$author = !isset($author)?$_SESSION['id']:$author;
-		$sql = "SELECT ". 
-			    "artikel.*,".
-				"artikelkategori.* ".
-				"FROM artikel ".
-				"INNER JOIN artikelkategori ON artikelkategori.idkategori = artikel.idkategori ".
-				"WHERE ".
-				"author = '$author' AND ".
-				"type = '00' AND ".
-				"artikel.status <> 'D' ".
-				"ORDER BY artikel.idkategori";
-		return $this->_db->Exec($sql);
+	public function getJudul(){
+		return $this->judul;
 	}
-	public function daftarTerbaru($author=null,$limit=null){
-		$author = !isset($author)&&isset($_SESSION['id'])?$_SESSION['id']:$author;
-		$sql = "SELECT ". 
-			    "artikel.*,".
-				"artikelkategori.* ".
-				"FROM artikel ".
-				"INNER JOIN artikelkategori ON artikelkategori.idkategori = artikel.idkategori ".
-				"WHERE ";
-		$sql .= ($author!="")?"author = '$author' AND ":"";
-		$sql .=	"type = '00' AND ".
-				"artikel.status = 'A' ".
-				"ORDER BY artikel.tgl DESC,artikel.jam DESC ";
-		$sql .= isset($limit)&&($limit>0)?"LIMIT $limit":"";
-		return $this->_db->Exec($sql);
+	public function getIsi(){
+		return $this->isi;
 	}
-	public function getKategori(){
-		$sql = "SELECT * FROM artikelkategori WHERE status = 'A'";
-		return $this->_db->Exec($sql);
+	public function getGambar(){
+		return $this->gambar;
+	}
+	public function getTipe(){
+		return $this->tipe;
+	}
+	public function getTerbaru(){
+		$sql = "";
+	}
+	public function tambahKomentar(IKomen $komen){
+		$this->komens[] = $komen;
+	}
+	public function bacaKomens(){
+		return $this->komens;
+	}
+	private function getSemuaKomen($kodeartikel){
+		/* Load semua komentar untuk artikel ini */
 	}
 }

@@ -7,6 +7,8 @@
 <link href="public/assets/css/bootstrap.css" rel="stylesheet">
 
 <link rel="stylesheet" href="public/assets/css/style.css" type="text/css" media="all" />
+<link rel="stylesheet" href="public/assets/css/jquery-ui.1.12.1.css" type="text/css" media="all" />
+<script src="public/assets/js/jquery.js"></script>
 </head>
 <body>
 <!-- Header -->

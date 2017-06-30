@@ -1,23 +1,10 @@
 <?php
-/**
-* 
-*/
-class Admin extends Anggota
+class Admin extends Anggota implements IAnggota
 {
-	function __construct(Akun $akun){
-		$this->akun = $akun;
-	}
-
-	// Pengelolaan Anggota Lain
-	public function blockAkun(Akun $akun){}
-	public function openAkun(Akun $akun){}
-
-	// Pengelolaan Artikel
-	public function otorisasiArtikel(Artikel $artikel){}
-	public function hapusArtikel(Artikel $artikel){}
-
-	// Pengelolaan Pesan
-	public function lihatSemuaPesanTerbaru(){}
-	public function hapusSemuaPesan(){}
-
+	private $wewenang;
+	public function getWewenang() {}
+	public function kirimArtikel(IArtikel $artikel){}
+	public function bacaArtikel(IArtikel $artikel){}
+	public function kirimKomen(IArtikel $artikel,IKomen $komen){}
+	public function bacaKomen(IArtikel $artikel,IKomen $komen){}
 }

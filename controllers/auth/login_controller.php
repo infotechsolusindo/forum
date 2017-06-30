@@ -25,9 +25,9 @@ class Login_Controller extends Controller{
 		$this->Load_View('auth/login');
 		
 		$this->view->Assign('error',$this->error);
-		if(!empty($_POST)&&isset($_POST['login-member'])){
-			$this->loginMember();
-		}
+		//if(!empty($_POST)&&isset($_POST['login-member'])){
+		//	$this->loginMember();
+		//}
 
 	}
 
@@ -42,27 +42,28 @@ class Login_Controller extends Controller{
 			'id' => $userid,
 			'password' => $password
 		];
-		$akun = new Akun();
+
+		$akun = new Anggota;
 		$akun->set($config);
-		$user = $akun->getProfile();
-		if($user->password !== $password){
+                
+		if($akun->getPassword() !== md5($password)){
 			logs('Login gagal, Password salah');
 			session_destroy();
 		 	redirect(SITE_ROOT,'index');
 		}
 		logs('Login sukses');
-		$this->setSession($user);
+                $this->setSession($akun);
 	}
 
 	public function setSession($user) {
-		if(!isset($_SESSION[$user->userid])){
-			$_SESSION['id'] = $user->userid;
+		if(!isset($_SESSION[$user->getNRA()])){
+			$_SESSION['id'] = $user->getNRA();
 			$_SESSION['time'] = time();
-			$_SESSION['nama'] = $user->nama;
-			$_SESSION['email'] = $user->email;
-			$_SESSION['privileges'] = $user->status!='S'?'anggota':'seleksi';
+			$_SESSION['nama'] = $user->getNamaLengkap();
+			$_SESSION['email'] = $user->getEmail();
+			$_SESSION['privileges'] = $user->getStatus()!='x'?'anggota':'seleksi';
 			$_SESSION['path'] = $_SESSION['privileges'].'/index';
-		 	redirect(SITE_ROOT,$this->path);
+		 	redirect(SITE_ROOT,$_SESSION['path']);
 		}
 
 	}

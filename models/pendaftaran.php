@@ -1,33 +1,36 @@
 <?php
-/**
-* 
-*/
-class Pendaftaran
+class Pendaftaran extends Model 
 {
-	private $loginid;
-	private $dokumens = [];
-	private $capaska;
-
-	function __construct(Capaska $capaska)
-	{
-		$this->capaska = $capaska;
+	private $idpendaftaran;
+	private $peserta;
+	private $dokumen = [];
+	protected $errors = [];
+	function __construct(){
+		$database = DB_ENGINE;
+        $this->_db = new $database;
+        $this->_db->setTable('pendaftaran');
 	}
-
-	private function simpanPendaftaran() {
-		/*
-			Simpan Pendaftaran ke Tabel Pendaftaran
-			dan Capaska ke Tabel Capaska untuk di review oleh Admin Seleksi
-
-			Kirim email notifikasi ke Admin Seleksi 
-			dan email notifikasi ke pendaftar bahwa pendaftaran diterima untuk direview.
-		*/
+	public function tambahPeserta(Peserta $peserta){
+		$this->peserta = $peserta;
 	}
-
-	public function tambahDokumen($dokumen) {
-		$this->dokumens[] = $dokumen;
+	public function tambahDokumen(Dokumen $dokumen){
+		$this->dokumen[$dokumen->getTipe()] = $dokumen;
 	}
-
-	public function getLoginId() {
-		return '';
+	public function simpanPendaftaran() {
+		$result = $this->peserta->simpan();
+		if(!empty($result->error)){
+			$this->errors[] = $result->error;
+			return $result;
+		}
+		$data['peserta'] = $this->peserta->getEmail();
+		$data['tanggal'] = date('Y-m-d');
+		foreach ($this->dokumen as $dokumen) {
+			$dokumen->setPeserta($this->peserta->getEmail());
+			$this->errors[] = $dokumen->simpan();
+		}
+		//Simpan pendaftaran ke database
+		$this->_db->create($data);
+		if(empty($this->errors)){
+		}
 	}
 }

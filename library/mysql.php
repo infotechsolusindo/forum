@@ -17,15 +17,30 @@ class Mysql extends Database
 		$this->host 	= HOST;
 		$this->user 	= USERNAME;
 		$this->password = PASSWORD;
-		$this->db 	= DB;
+        $this->db   = DB;
         $this->connection = self::connect();
         mysqli_report(MYSQLI_REPORT_STRICT);
-	}
+    }
+    function connect() {
+        // Define connection as a static variable, to avoid connecting more than once 
+        static $connection;
+        // Try and connect to the database, if a connection has not been established yet
+        if(!isset($connection)) {
+             // Load configuration as an array. Use the actual location of your configuration file
+            $connection = mysqli_connect($this->host,$this->user,$this->password,$this->db);
+        }
+        // If connection was not successful, handle the error
+        if($connection === false) {
+            // Handle error - notify administrator, log to a file, show an error screen, etc.
+            logs(mysqli_connect_error());
+            return mysqli_connect_error(); 
+        }
+        return $connection;
+    }
     /**
      * Set Table and Default Key
      */
     public function setTable($table,$pk='id'){
-        logs($pk);
         $this->_table = $table;
         $this->_pk = $pk;
     }
@@ -45,30 +60,17 @@ class Mysql extends Database
         return $this->Exec("SELECT * FROM $this->_table $where");
     }
 
-    function connect() {
-
-        // Define connection as a static variable, to avoid connecting more than once 
-        static $connection;
-
-        // Try and connect to the database, if a connection has not been established yet
-        if(!isset($connection)) {
-             // Load configuration as an array. Use the actual location of your configuration file
-            $connection = mysqli_connect($this->host,$this->user,$this->password,$this->db);
-        }
-
-        // If connection was not successful, handle the error
-        if($connection === false) {
-            // Handle error - notify administrator, log to a file, show an error screen, etc.
-            logs(mysqli_connect_error());
-            return mysqli_connect_error(); 
-        }
-        return $connection;
-    }
-
     function Exec($sql,$action=null,$mode=null){
         $data = [];
         if(!$mode) logs('SQL:'.$sql);
         $result = mysqli_query($this->connection,$sql);
+        if(!$result){
+            $result = new stdClass;
+            $result->error = $this->connection->errno;
+            logs($this->connection->errno.':'.$this->connection->error);
+            // var_dump($result);
+            return $result;
+        }
         if(is_object($result)){
             if(isset($action)=='length'){
                 return mysqli_num_rows($result);
@@ -79,7 +81,7 @@ class Mysql extends Database
             return $data;
             mysqli_free_result($result);
         }
-        return $result;
+        // return $result;
     }
 
     function getById($id,$table,$pk,$options=null){
@@ -175,11 +177,7 @@ class Mysql extends Database
      *        [ 'name' => 'char', 'age' => int ]
      *
      ********************************************************** */
-    public function create($table,$inputs,$type=null){
-        $fields = '';
-        $data = '';
-        $i = 0;
-        foreach ($inputs as $key => $value) {
+/*        foreach ($inputs as $key => $value) {
             $i++;
             logs($i.':'.count($inputs));
             logs('Data:'.$key.'=>'.$value);
@@ -192,12 +190,28 @@ class Mysql extends Database
             } else {
                 $data .= '\'' . $value . '\'' . $comma;                
             }
+        }*/
+    public function create($inputs){
+        $fields = '';
+        $data = '';
+        $arrkeys = [];
+        $arrvalues = [];
+        $i = 0;
+        foreach ($inputs as $key => $value) {
+            $arrkeys[] = $key;
+            logs('Data:'.$key.'='.gettype($value));
+            $value = gettype($value)=='string'?"'$value'":$value;
+            $value = $value?$value:'NULL';
+            $arrvalue[] = $value;
         }
-        $sql = "INSERT INTO $table ";
+        $fields = join($arrkeys,',');
+        $data = join($arrvalue,',');
+        $sql = "INSERT INTO $this->_table ";
         $sql .= "($fields) ";
         $sql .= "VALUE($data)";
         logs($sql);
-        return $this->Exec($sql);
+        $result = $this->Exec($sql);
+        return $result;
     }
 
     /**********************************************************

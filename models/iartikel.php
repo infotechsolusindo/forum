@@ -1,7 +1,7 @@
 <?php
-interface IArtikel {
-	public function add();
-	public function remove();
-	public function edit();
-	public function getAuthor();
+interface IArtikel 
+{
+	public function simpan($data);
+	public function baca();
+	public function setTipe($tipe);
 }

@@ -121,7 +121,7 @@ class Service_Controller extends Controller
 	}
 */
 	public function pool(){
-		echo 'halo bram'.PHP_EOL;
+		echo 'halo '.PHP_EOL;
 	}
 
 	public function loop(){

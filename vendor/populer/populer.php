@@ -5,7 +5,7 @@ class Populer {
 
 	public function __construct(){
 		// $data = new Service_Model;
-		$this->name = 'bram';
+		$this->name = '';
 	}
 
 }

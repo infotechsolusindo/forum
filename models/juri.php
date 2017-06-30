@@ -1,12 +1,13 @@
 <?php
-/**
-* 
-*/
-class Juri extends Admin
+class Juri extends Anggota implements IAnggota
 {
-	
-	function __construct(argument)
-	{
-		# code...
+	private $tugasJuri;
+	function __construct() {}
+	public function getTugasJuri() {
+		return $this->tugasJuri;
 	}
+	public function kirimArtikel(IArtikel $artikel){}
+	public function bacaArtikel(IArtikel $artikel){}
+	public function kirimKomen(IArtikel $artikel,IKomen $komen){}
+	public function bacaKomen(IArtikel $artikel,IKomen $komen){}
 }

@@ -1,0 +1,109 @@
+/www/forum.localhost/testing/controller.php:49:
+class Peserta#1 (20) {
+  private $akun =>
+  NULL
+  protected $nra =>
+  string(11) "87928349326"
+  protected $namalengkap =>
+  NULL
+  protected $namapanggilan =>
+  NULL
+  protected $angkatan =>
+  NULL
+  protected $jeniskelamin =>
+  NULL
+  protected $tempatlahir =>
+  NULL
+  protected $tgllahir =>
+  NULL
+  protected $nomerponsel =>
+  NULL
+  protected $alamatdomisili =>
+  NULL
+  protected $pendidikanterakhir =>
+  NULL
+  protected $pekerjaan =>
+  NULL
+  protected $institusi =>
+  NULL
+  protected $jabatan =>
+  NULL
+  protected $foto =>
+  NULL
+  protected $status =>
+  NULL
+  protected $userid =>
+  NULL
+  protected $email =>
+  string(24) "brahmantyo.adi@gmail.com"
+  protected $password =>
+  string(32) "d9b1d7db4cd6e70935368a1efb10e377"
+  protected $_db =>
+  class Mysql#2 (12) {
+    protected $connection =>
+    class mysqli#3 (19) {
+      public $affected_rows =>
+      int(0)
+      public $client_info =>
+      string(79) "mysqlnd 5.0.12-dev - 20150407 - $Id: b5c5906d452ec590732a93b051f3827e02749b83 $"
+      public $client_version =>
+      int(50012)
+      public $connect_errno =>
+      int(0)
+      public $connect_error =>
+      NULL
+      public $errno =>
+      int(0)
+      public $error =>
+      string(0) ""
+      public $error_list =>
+      array(0) {
+        ...
+      }
+      public $field_count =>
+      int(0)
+      public $host_info =>
+      string(25) "Localhost via UNIX socket"
+      public $info =>
+      NULL
+      public $insert_id =>
+      int(0)
+      public $server_info =>
+      string(23) "5.7.17-0ubuntu0.16.04.1"
+      public $server_version =>
+      int(50717)
+      public $stat =>
+      string(136) "Uptime: 14390  Threads: 2  Questions: 651  Slow queries: 0  Opens: 270  Flush tables: 1  Open tables: 100  Queries per second avg: 0.045"
+      public $sqlstate =>
+      string(5) "00000"
+      public $protocol_version =>
+      int(10)
+      public $thread_id =>
+      int(58)
+      public $warning_count =>
+      int(0)
+    }
+    private $host =>
+    string(9) "localhost"
+    private $user =>
+    string(4) "root"
+    private $password =>
+    string(6) "123456"
+    private $db =>
+    string(8) "newforum"
+    public $_table =>
+    string(7) "anggota"
+    private $_pk =>
+    string(2) "id"
+    protected $_conn =>
+    NULL
+    private $host =>
+    NULL
+    private $user =>
+    NULL
+    private $password =>
+    NULL
+    private $db =>
+    NULL
+  }
+}
