@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.17, for Linux (x86_64)
 --
--- Host: localhost    Database: forum
+-- Host: localhost    Database: newforum
 -- ------------------------------------------------------
 -- Server version	5.7.17-0ubuntu0.16.04.1
 
@@ -16,127 +16,67 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `_mail`
+-- Table structure for table `akun`
 --
 
-DROP TABLE IF EXISTS `_mail`;
+DROP TABLE IF EXISTS `akun`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_mail` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sender` varchar(100) NOT NULL,
-  `receiver` varchar(100) NOT NULL,
-  `subject` varchar(300) NOT NULL,
-  `body` text,
-  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `sent_time` datetime DEFAULT NULL,
-  `status` enum('0','1','2','3') DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `_modules`
---
-
-DROP TABLE IF EXISTS `_modules`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_modules` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(15) NOT NULL,
-  `path` varchar(50) NOT NULL,
-  `status` char(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+CREATE TABLE `akun` (
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `wewenang` char(1) NOT NULL DEFAULT 'x',
+  `created` timestamp NULL DEFAULT NULL,
+  `lastmodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`email`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `_service`
+-- Table structure for table `anggota`
 --
 
-DROP TABLE IF EXISTS `_service`;
+DROP TABLE IF EXISTS `anggota`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_service` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `starttime` datetime DEFAULT NULL,
-  `laststop` datetime DEFAULT NULL,
-  `status` enum('0','1','2','3') NOT NULL DEFAULT '0',
-  `description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+CREATE TABLE `anggota` (
+  `nra` varchar(20) DEFAULT NULL,
+  `email` varchar(50) NOT NULL,
+  `angkatan` char(4) NOT NULL,
+  `namalengkap` varchar(50) NOT NULL,
+  `namapanggilan` varchar(20) DEFAULT NULL,
+  `jeniskelamin` enum('L','P') NOT NULL,
+  `tempatlahir` char(15) DEFAULT NULL,
+  `tgllahir` date DEFAULT NULL,
+  `nomerponsel` char(15) DEFAULT NULL,
+  `alamatdomisili` varchar(50) DEFAULT NULL,
+  `pendidikanterakhir` enum('SMP','SMU','SMK','D1','D3','S1') DEFAULT NULL,
+  `pekerjaan` varchar(30) DEFAULT NULL,
+  `institusi` varchar(20) DEFAULT NULL,
+  `jabatan` varchar(20) DEFAULT NULL,
+  `foto` varchar(100) DEFAULT NULL,
+  `status` char(1) NOT NULL DEFAULT 'D',
+  UNIQUE KEY `idx0` (`nra`,`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `_spool`
+-- Table structure for table `aturanseleksi`
 --
 
-DROP TABLE IF EXISTS `_spool`;
+DROP TABLE IF EXISTS `aturanseleksi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `_spool` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ctime` timestamp NULL DEFAULT NULL,
-  `etime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `procname` varchar(10) NOT NULL,
-  `status` enum('0','1','2','3') DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `artikel`
---
-
-DROP TABLE IF EXISTS `artikel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `artikel` (
-  `idartikel` int(11) NOT NULL AUTO_INCREMENT,
-  `type` char(2) NOT NULL DEFAULT '00',
-  `tgl` date NOT NULL,
-  `jam` time NOT NULL,
-  `idkategori` int(11) NOT NULL DEFAULT '0',
-  `judul` varchar(100) NOT NULL,
-  `author` varchar(20) NOT NULL,
-  `thumbnail` varchar(20) DEFAULT NULL,
-  `isi` text NOT NULL,
-  `status` char(1) DEFAULT NULL,
-  PRIMARY KEY (`idartikel`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `artikelkategori`
---
-
-DROP TABLE IF EXISTS `artikelkategori`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `artikelkategori` (
-  `idkategori` int(11) NOT NULL AUTO_INCREMENT,
-  `namakategori` varchar(30) NOT NULL,
-  `deskripsi` varchar(50) DEFAULT NULL,
-  `status` char(1) DEFAULT NULL,
-  PRIMARY KEY (`idkategori`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `departemen`
---
-
-DROP TABLE IF EXISTS `departemen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `departemen` (
-  `iddepartemen` int(11) NOT NULL AUTO_INCREMENT,
-  `idparent` int(11) DEFAULT '0',
-  `name` varchar(25) NOT NULL,
-  PRIMARY KEY (`iddepartemen`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+CREATE TABLE `aturanseleksi` (
+  `angkatan` varchar(4) NOT NULL DEFAULT '1910',
+  `tahap` int(2) NOT NULL DEFAULT '1',
+  `nomerberkas` int(2) NOT NULL,
+  `namaberkas` varchar(20) NOT NULL,
+  `wajib` tinyint(1) NOT NULL DEFAULT '0',
+  `admin` varchar(20) NOT NULL,
+  `created` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,83 +87,186 @@ DROP TABLE IF EXISTS `dokumen`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dokumen` (
-  `iddoc` int(11) NOT NULL AUTO_INCREMENT,
-  `tgl` date NOT NULL,
-  `jam` time NOT NULL,
-  `kategori` int(11) NOT NULL DEFAULT '0',
-  `nodoc` varchar(20) DEFAULT NULL,
-  `judul` varchar(50) DEFAULT NULL,
-  `perihal` varchar(100) DEFAULT NULL,
-  `pengirim` varchar(50) DEFAULT NULL,
-  `penerima` varchar(50) DEFAULT NULL,
-  `status` char(1) NOT NULL,
-  `tglkirim` date DEFAULT NULL,
-  `jamkirim` time DEFAULT NULL,
-  `tglterima` date DEFAULT NULL,
-  `jamterima` time DEFAULT NULL,
-  PRIMARY KEY (`iddoc`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `iddokumen` int(11) NOT NULL AUTO_INCREMENT,
+  `tipe` int(2) NOT NULL,
+  `peserta` varchar(50) NOT NULL,
+  `judul` varchar(50) NOT NULL,
+  `deskripsi` varchar(20) NOT NULL,
+  `file` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`iddokumen`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `jabatan`
+-- Table structure for table `formulir`
 --
 
-DROP TABLE IF EXISTS `jabatan`;
+DROP TABLE IF EXISTS `formulir`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `jabatan` (
-  `idjabatan` int(11) NOT NULL AUTO_INCREMENT,
-  `iddepartemen` int(11) NOT NULL,
-  `namajabatan` varchar(50) NOT NULL,
-  `deskripsi` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`idjabatan`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user_departemen`
---
-
-DROP TABLE IF EXISTS `user_departemen`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_departemen` (
-  `userid` varchar(30) NOT NULL,
-  `iddepartemen` int(11) NOT NULL
+CREATE TABLE `formulir` (
+  `idform` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idform`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `user_jabatan`
+-- Table structure for table `forum`
 --
 
-DROP TABLE IF EXISTS `user_jabatan`;
+DROP TABLE IF EXISTS `forum`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_jabatan` (
-  `userid` varchar(30) NOT NULL,
-  `idjabatan` int(11) NOT NULL
+CREATE TABLE `forum` (
+  `idforum` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idforum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `karir`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `karir`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `userid` varchar(30) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `name` varchar(30) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
-  `status` char(1) DEFAULT NULL,
-  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `last_login` timestamp NULL DEFAULT NULL,
-  `created` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`userid`)
+CREATE TABLE `karir` (
+  `kodekarir` int(11) NOT NULL AUTO_INCREMENT,
+  `nra` varchar(20) NOT NULL,
+  `kategori` int(11) NOT NULL,
+  `tanggal` date NOT NULL,
+  `gaji` float DEFAULT NULL,
+  `bataswaktu` int(11) NOT NULL,
+  `judul` varchar(50) NOT NULL,
+  `isi` text NOT NULL,
+  `gambar` varchar(50) DEFAULT NULL,
+  `status` char(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`kodekarir`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `kegiatan`
+--
+
+DROP TABLE IF EXISTS `kegiatan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kegiatan` (
+  `kodekegiatan` int(11) NOT NULL AUTO_INCREMENT,
+  `nra` varchar(20) NOT NULL,
+  `tanggal` date NOT NULL,
+  `jadwal` datetime NOT NULL,
+  `durasi` int(11) NOT NULL,
+  `biaya` float DEFAULT NULL,
+  `judul` varchar(50) NOT NULL,
+  `isi` text NOT NULL,
+  `gambar` varchar(50) DEFAULT NULL,
+  `status` char(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`kodekegiatan`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `komenkarir`
+--
+
+DROP TABLE IF EXISTS `komenkarir`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `komenkarir` (
+  `kodekomenkarir` int(11) NOT NULL AUTO_INCREMENT,
+  `kodekarir` int(11) NOT NULL,
+  `nra` int(11) NOT NULL,
+  `tanggal` date NOT NULL,
+  `isi` text NOT NULL,
+  PRIMARY KEY (`kodekomenkarir`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `komenkegiatan`
+--
+
+DROP TABLE IF EXISTS `komenkegiatan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `komenkegiatan` (
+  `idkomenkegiatan` int(11) NOT NULL AUTO_INCREMENT,
+  `kodekegiatan` int(11) NOT NULL,
+  `nra` varchar(20) NOT NULL,
+  `tanggal` date NOT NULL,
+  `isi` text NOT NULL,
+  PRIMARY KEY (`idkomenkegiatan`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `komenthread`
+--
+
+DROP TABLE IF EXISTS `komenthread`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `komenthread` (
+  `kodekomenthread` int(11) NOT NULL AUTO_INCREMENT,
+  `tanggal` date NOT NULL,
+  `kodethread` int(11) NOT NULL,
+  `nra` varchar(20) NOT NULL,
+  `waktu` time NOT NULL,
+  `isi` text NOT NULL,
+  `gambar` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`kodekomenthread`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pendaftaran`
+--
+
+DROP TABLE IF EXISTS `pendaftaran`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pendaftaran` (
+  `idpendaftaran` int(11) NOT NULL AUTO_INCREMENT,
+  `tanggal` date NOT NULL,
+  `peserta` varchar(50) NOT NULL,
+  `status` char(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idpendaftaran`),
+  UNIQUE KEY `peserta` (`peserta`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `seleksi`
+--
+
+DROP TABLE IF EXISTS `seleksi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `seleksi` (
+  `idseleksi` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idseleksi`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `thread`
+--
+
+DROP TABLE IF EXISTS `thread`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `thread` (
+  `kodethread` int(11) NOT NULL AUTO_INCREMENT,
+  `nra` varchar(20) NOT NULL,
+  `tanggal` date NOT NULL,
+  `judul` varchar(50) NOT NULL,
+  `isi` text NOT NULL,
+  `topik` varchar(20) DEFAULT NULL,
+  `status` char(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`kodethread`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -236,4 +279,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-23 11:12:03
+-- Dump completed on 2017-06-30 21:55:44
