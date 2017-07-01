@@ -1,15 +1,15 @@
 <?php
-class Akun extends Model 
-{
-	protected $userid;
+class Akun extends Model {
 	protected $email;
 	protected $password;
-	function __construct() {
+	protected $wewenang;
+	public function __construct() {
 		$database = DB_ENGINE;
-                $this->_db = new $database;
+		$this->_db = new $database;
+		$this->_db->setTable('akun');
 	}
 	public function isLogin() {
-		if(isset($_SESSION['id'])) {
+		if (isset($_SESSION['id'])) {
 
 		}
 	}
@@ -20,15 +20,57 @@ class Akun extends Model
 		$this->password = md5($password);
 		return $this;
 	}
-        public function getPassword() {
-                return $this->password;
-        }
-	public function ubahPassword($oldpassword,$newpassword) {
-		return;
+	public function setWewenang($wewenang) {
+		$this->wewenang = $wewenang;
 	}
-	public function simpanAkun($data) {
+	public function getEmail() {
+		return $this->email;
+	}
+	public function getPassword() {
+		return $this->password;
+	}
+	public function getWewenang() {
+		return $this->wewenang;
+	}
+	public function ubahPassword($oldpassword, $newpassword) {
+		return $this->_db->Exec("update akun set password = md5('$newpassword') where email = '$this->email'");
+	}
+
+	public function verifyPassword($konfirmasi) {
+		if ($this->password === md5($konfirmasi)) {
+			return true;
+		}
+
+	}
+
+	public function simpanAkun($data = null) {
 		$data['created'] = date('Y-m-d h:m:s');
-                $this->_db->setTable('akun');
+		$data['email'] = $this->email;
+		$data['password'] = md5($this->password);
 		return $this->_db->create($data);
+	}
+	public function getAkun($wewenang = '') {
+		$sql = "select * from akun where email = '$this->email' ";
+		if ($wewenang != '') {
+			$sql .= "and wewenang = '$wewenang'";
+		}
+		$akun = $this->_db->Exec($sql);
+		if (empty($akun)) {
+			return false;
+		}
+		$this->password = $akun[0]->password;
+		$this->wewenang = $akun[0]->wewenang;
+		return true;
+	}
+
+	public function getSecret() {
+		$sec = $this->_db->Exec("select * from akun where email = '$this->email' and wewenang = 'x'");
+		return md5($sec[0]->email . $sec[0]->password . $sec[0]->lastmodify);
+	}
+	public function checkSecret($secret) {
+		if ($this->getSecret() === $secret) {
+			$this->_db->Exec("update akun set wewenang = 'p', lastmodify = CURRENT_TIMESTAMP where email = '$this->email' and wewenang = 'x'");
+			return true;
+		} else {return false;}
 	}
 }

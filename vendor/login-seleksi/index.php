@@ -3,16 +3,17 @@
 		<h2>Peserta Seleksi</h2>
 	</div>
 	<div class="panel-body">
-		<form action="#" method="post">
+		<form action="?url=auth/login" method="post">
 			<!-- Form -->
 			<div class="form">
+				<input type="hidden" name="login-seleksi">
 				<div class="form-group">
 				<input type="text" name="email" placeholder="Email Pendaftaran" class="form-control">
 				</div>
 				<div class="form-group">
-				<input type="text" name="password" placeholder="Password" class="form-control">
+				<input type="password" name="password" placeholder="Password" class="form-control">
 				</div>
-				<span><a href="?url=index/pendaftaran">Belum terdaftar?</a></span>
+				<span><a href="?url=index/pendaftaran1">Belum terdaftar?</a></span>
 				<!-- Form Buttons -->
 				<div class="buttons">
 				  <input type="submit" class="button" value="Login" />

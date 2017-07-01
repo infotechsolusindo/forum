@@ -4,3 +4,8 @@ tmp/logs/error_log
 tmp/logs/service_log
 config/config.php
 **/*.swp
+**/*.sqlite
+public/data/berkas/*
+public/data/formulir/*
+public/data/foto/*
+public/tmp/*

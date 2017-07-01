@@ -1,135 +1,123 @@
-<?php echo $data['header'];?>
+<?php echo $data['header']; ?>
     <!-- Container -->
     <div id="container">
-      <?php if(!empty($data['successMessage'])){?>
+      <?php if (!empty($data['successMessage'])) {?>
       <!-- Message OK -->
       <div id="successMessage" class="msg msg-ok">
         <p><strong>Your file was uploaded succesifully!</strong></p>
         <a href="#" class="close">close</a> </div>
       <!-- End Message OK -->
-      <?php } ?>
-      <?php if(!empty($data['errorMessage'])){?>
+      <?php }?>
+      <?php if (!empty($data['errorMessage'])) {?>
       <!-- Message Error -->
       <div id="errorMessage" class="msg msg-error">
-        <p><strong><?php echo join($data['errorMessage'],'<br>');?></strong></p>
+        <p><strong><?php echo join($data['errorMessage'], '<br>'); ?></strong></p>
         <a href="#" class="close">close</a> </div>
       <!-- End Message Error -->
-      <?php } ?>
+      <?php }?>
       <div class="row">
         <div id="main" class="col-md-10 col-sm-10">
           <div class="panel panel-primary">
             <div class="panel-heading">
               <div class="pull-left">
-                <h2>Pendaftaran Anggota PASKIBRAKA</h2>
+                <h2>Pendaftaran Anggota PASKIBRAKA Angkatan <?php echo date('Y'); ?></h2>
               </div>
-              <form action="/">
-              <div class="pull-right">
-                <label><i class="glyphicon glyphicon-arrow-left"></i></label>
-                <input type="submit" class="button" value="Kembali" />
-              </div>
-              </form>
             </div>
             <div class="panel-body">
-              <form action="?url=index/pendaftaran&cmd=save" method="post" enctype="multipart/form-data">
+              <form action="?url=pendaftaran/index&cmd=save" method="post" enctype="multipart/form-data">
                 <!-- Form -->
                 <div class="form">
                   <p>
                     <span class="req"></span>
-                    <label>Email <span>(Wajib diisi)</span></label>
-                    <input type="text" name="email" class="field size1" value="<?php echo $data['capaska']->getEmail();?>" />
+                    <label>Email <span></span></label>
+                    <input type="hidden" name="email" value="<?php echo $data['peserta']->getEmail(); ?>" />
+                    <label><?php echo $data['peserta']->getEmail(); ?></label>
                   </p>
-                  <p>
-                    <span class="req">Minimal 6 karakter alfanumerik</span>
-                    <label>Password <span>(Wajib diisi)</span></label>
-                    <input type="password" name="password" class="field size1" value="" />
-                  </p>
-                  <p>
-                    <span class="req">Minimal 6 karakter alfanumerik</span>
-                    <label>Konfirmasi <span>(Wajib diisi)</span></label>
-                    <input type="password" name="konfirmasi" class="field size1" value="" />
-                  </p>
-                </div>
-                <div class="form">
                   <p>
                     <!-- <span class="req"></span> -->
                     <label>NRA <span></span></label>
-                    <input type="text" name="nra" class="field size1" value="" />
+                    <input type="text" name="nra" class="field size1" value="<?php echo $data['peserta']->getNRA(); ?>" />
                   </p>
                   <p>
                     <span class="req"></span>
-                    <label>Nama Panggilan <span>(Wajib diisi)</span></label>
-                    <input type="text" name="namapanggilan" class="field size1" value="" />
+                    <label>Nama Panggilan <span></span></label>
+                    <input type="text" name="namapanggilan" class="field size1" value="<?php echo $data['peserta']->getNamaPanggilan(); ?>" />
                   </p>
                   <p>
                     <span class="req"></span>
                     <label>Nama Lengkap <span>(Wajib diisi)</span></label>
-                    <input type="text" name="namalengkap" class="field size1" value="" />
+                    <input type="text" name="namalengkap" class="field size1" value="<?php echo $data['peserta']->getNamaLengkap(); ?>" />
                   </p>
-                  <p>
+<!--                   <p>
                     <span class="req"></span>
                     <label>Angkatan <span>(Wajib diisi)</span></label>
                     <select name="angkatan" id="angkatan" class="field size1">
-                    <?php $tahun = date('Y'); for($t=0;$t<=20;$t++){?>
-                      <option value=""><?php echo $tahun-$t;?></option>
-                    <?php } ?>
+                    <?php $tahun = date('Y');for ($t = 0; $t <= 20; $t++) {?>
+                      <option value=""><?php echo $tahun - $t; ?></option>
+                    <?php }?>
                     </select>
-                  </p>
+                  </p> -->
                   <p>
                     <span class="req"></span>
                     <label>Jenis Kelamin <!-- <span>(Wajib diisi)</span> -->
                       <label for="laki">
-                        &nbsp;&nbsp;&nbsp;<input type="radio" name="jeniskelamin" id="laki" value="L" checked="checked"> Laki - Laki
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="jeniskelamin" id="laki" value="L" <?=($data['jeniskelaminselect'] == 'L' || $data['jeniskelaminselect'] == '') ? 'checked="checked"' : '';?>> Laki - Laki
                       </label>
                       <label for="perempuan">
-                        &nbsp;&nbsp;&nbsp;<input type="radio" name="jeniskelamin" id="perempuan" value="P"> Perempuan
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="jeniskelamin" id="perempuan" value="P" <?=($data['jeniskelaminselect'] == 'P') ? 'checked="checked"' : '';?>> Perempuan
                       </label>
                     </label>
                   </p>
                   <p>
                     <div class="form-group">
                       <label>Tempat Tgl Lahir</label>
-                      <!-- <span class="req">Minimal 6 angka</span> -->
                       <div class="col-sm-3">
-                        <input type="text" name="tempatlahir" class="form-control" value="" />
+                        <input type="text" name="tempatlahir" class="form-control" placeholder="Tempat" value="<?php echo $data['peserta']->getTempatLahir(); ?>" />
                       </div>
                       <div class="col-sm-3">
-                        <input type="date" name="tgllahir" id="tgllahir" class="form-control" value="" />
+                        <input type="date" name="tgllahir" id="tgllahir" class="form-control" placeholder="Tanggal" value="" />
                       </div>
                     </div>
                   </p>
                   <p>
                     <span class="req">Minimal 6 angka</span>
                     <label>Telp/Handphone</label>
-                    <input type="text" name="telp" class="field size1" value="" />
+                    <input type="text" name="telp" class="field size1" value="<?php echo $data['peserta']->getNomerPonsel(); ?>" />
                   </p>
                   <p>
                     <span class="req">Minimal 6 angka</span>
                     <label>Alamat Domisili</label>
                     <input type="text" name="alamatdomisili" class="field size1" value="" />
+                    <select name="wilayah" class="field size1">
+                    <?php foreach ($data['wilayah'] as $wilayah) {
+	?>
+                      <option value="<?php echo $wilayah->id; ?>" <?=($data['wilayahselect'] == $wilayah->id) ? "selected='selected'" : '';?>><?php echo $wilayah->nama; ?></option>
+                    <?php }?>
+                    </select>
                   </p>
                   <p>
                     <span class="req">Minimal 6 angka</span>
                     <label>Pendidikan Terakhir</label>
                     <select name="pendidikanterakhir" id="" class="size1">
-                      <option value="SMP">SMP</option>
-                      <option value="SMU">SMU</option>
-                      <option value="SMK">SMK</option>
-                      <option value="D1">D1</option>
-                      <option value="D3">D3</option>
-                      <option value="S1">S1</option>
+                      <option value="SMP" <?=$data['pendidikanterakhirselect'] == 'SMP' ? 'selected' : '';?>>SMP</option>
+                      <option value="SMU" <?=$data['pendidikanterakhirselect'] == 'SMU' ? 'selected' : '';?>>SMU</option>
+                      <option value="SMK" <?=$data['pendidikanterakhirselect'] == 'SMK' ? 'selected' : '';?>>SMK</option>
+                      <option value="D1" <?=$data['pendidikanterakhirselect'] == 'D1' ? 'selected' : '';?>>D1</option>
+                      <option value="D3" <?=$data['pendidikanterakhirselect'] == 'D3' ? 'selected' : '';?>>D3</option>
+                      <option value="S1" <?=$data['pendidikanterakhirselect'] == 'S1' ? 'selected' : '';?>>S1</option>
                     </select>
                   </p>
                   <p>
                     <span class="req">Minimal 6 angka</span>
                     <label>Pekerjaan</label>
-                    <input type="text" name="pekerjaan" class="field size1" value="" />
+                    <input type="text" name="pekerjaan" class="field size1" value="<?php echo $data['peserta']->getPekerjaan(); ?>" />
                   </p>
                   <p>
                     <span class="req">Minimal 6 angka</span>
                     <label>Institusi</label>
-                    <input type="text" name="institusi" class="field size1" value="" />
+                    <input type="text" name="institusi" class="field size1" value="<?php echo $data['peserta']->getInstitusi(); ?>" />
                   </p>
-                  <p>
+<!--                   <p>
                     <span class="req">Minimal 6 angka</span>
                     <label>Jabatan</label>
                     <select name="jabatan" id="" class="size1">
@@ -137,25 +125,11 @@
                       <option value="admin">Admin</option>
                       <option value="juri">Juri</option>
                     </select>
-                  </p>
+                  </p> -->
                   <p>
                     <label>Foto </label>
-                    <input type="file" name="foto" class="field size1" accept="image/jpg,image/jpeg,image/png" value="" />
-                  </p>
-                  <p>
-                    <div id="daftardokumen">                 
-                      <span class="req">Tipe file (txt,docx,doc,pdf,xlsx,xls,semua image file)</span>
-                      <label>Dokumen 
-                        <button id="tambahdokumen" type="button"><span class="glyphicon glyphicon-plus"></span> Tambah</button>
-                        <a href="?url=index/daftarblanko">Daftar Berkas yang Harus Dilengkapi</a>
-                      </label>
-                      <span class="dok" style="display: block;background:lightgreen;" >
-                        <label style="display:inline">Berkas 1</label>
-                        <input type="text" name="judulfile[1]" placeholder="Judul">
-                        <input type="text" name="deskripsifile[1]" placeholder="Deskripsi" style="width:400px">
-                        <input id="berkas1" type="file" name="berkas[1]"  style="display:inline-block" class="" accept="text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,image/*" value=""/>
-                      </span>
-                    </div>
+                    <img src="<?php echo $data['peserta']->getFoto(); ?>" height="100px"/>
+                    <input style="display: inline" type="file" name="foto" class="field" accept="image/jpg,image/jpeg,image/png" value="" />
                   </p>
                 </div>
                 <!-- End Form -->
@@ -169,7 +143,7 @@
           </div>
         </div>
         <div class="col-md-2 col-sm-2">
-          <?php echo $data['module_right'];?>
+          <?php echo $data['module_right']; ?>
         </div>
       </div>
     </div>
@@ -177,9 +151,16 @@
     <script src="public/assets/js/jquery-ui.1.12.1.js"></script>
     <script>
       idx = 1;
+<?php
+$tgl = $data['peserta']->getTglLahir();
+echo "d = '$tgl';";
+?>
       $('#tgllahir').datepicker({
+          changeYear: true,
+          yearRange: '1945:+0',
+          changeMonth:true,
           dateFormat:"yy-mm-dd"
-      });
+      }).datepicker('setDate',d);
       $('#tambahdokumen').on('click',function(){
         idx++;
         var b = $('#daftardokumen span.dok').first().clone();
@@ -200,4 +181,4 @@
         // $('#daftardokumen').append(b);
       });
     </script>
-<?php echo $data['footer'];?>
+<?php echo $data['footer']; ?>
