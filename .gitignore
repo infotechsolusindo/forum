@@ -9,3 +9,7 @@ public/data/berkas/*
 public/data/formulir/*
 public/data/foto/*
 public/tmp/*
+!public/data/berkas/.gitfile
+!public/data/formulir/.gitfile
+!public/data/foto/.gitfile
+!public/tmp/.gitfile
