@@ -85,7 +85,7 @@
                     <input type="text" name="telp" class="field size1" value="<?php echo $data['peserta']->getNomerPonsel(); ?>" />
                   </p>
                   <p>
-                    <span class="req">Minimal 6 angka</span>
+                    <span class="req"></span>
                     <label>Alamat Domisili</label>
                     <input type="text" name="alamatdomisili" class="field size1" value="" />
                     <select name="wilayah" class="field size1">
@@ -96,36 +96,33 @@
                     </select>
                   </p>
                   <p>
-                    <span class="req">Minimal 6 angka</span>
+                    <span class="req"></span>
                     <label>Pendidikan Terakhir</label>
                     <select name="pendidikanterakhir" id="" class="size1">
                       <option value="SMP" <?=$data['pendidikanterakhirselect'] == 'SMP' ? 'selected' : '';?>>SMP</option>
                       <option value="SMU" <?=$data['pendidikanterakhirselect'] == 'SMU' ? 'selected' : '';?>>SMU</option>
                       <option value="SMK" <?=$data['pendidikanterakhirselect'] == 'SMK' ? 'selected' : '';?>>SMK</option>
-                      <option value="D1" <?=$data['pendidikanterakhirselect'] == 'D1' ? 'selected' : '';?>>D1</option>
-                      <option value="D3" <?=$data['pendidikanterakhirselect'] == 'D3' ? 'selected' : '';?>>D3</option>
-                      <option value="S1" <?=$data['pendidikanterakhirselect'] == 'S1' ? 'selected' : '';?>>S1</option>
+                      <option value="D" <?=$data['pendidikanterakhirselect'] == 'D' ? 'selected' : '';?>>Diploma</option>
+                      <option value="S1" <?=$data['pendidikanterakhirselect'] == 'S1' ? 'selected' : '';?>>Strata 1</option>
+                      <option value="S2" <?=$data['pendidikanterakhirselect'] == 'S2' ? 'selected' : '';?>>Strata 2</option>
+                      <option value="S3" <?=$data['pendidikanterakhirselect'] == 'S3' ? 'selected' : '';?>>Strata 3</option>
                     </select>
                   </p>
                   <p>
-                    <span class="req">Minimal 6 angka</span>
+                    <span class="req"></span>
                     <label>Pekerjaan</label>
                     <input type="text" name="pekerjaan" class="field size1" value="<?php echo $data['peserta']->getPekerjaan(); ?>" />
                   </p>
                   <p>
-                    <span class="req">Minimal 6 angka</span>
+                    <span class="req"></span>
                     <label>Institusi</label>
                     <input type="text" name="institusi" class="field size1" value="<?php echo $data['peserta']->getInstitusi(); ?>" />
                   </p>
-<!--                   <p>
-                    <span class="req">Minimal 6 angka</span>
+                  <p>
+                    <span class="req"></span>
                     <label>Jabatan</label>
-                    <select name="jabatan" id="" class="size1">
-                      <option value="">---</option>
-                      <option value="admin">Admin</option>
-                      <option value="juri">Juri</option>
-                    </select>
-                  </p> -->
+                    <input type="text" name="jabatan" class="field size1" value="<?php echo $data['peserta']->getJabatan(); ?>" />
+                  </p>
                   <p>
                     <label>Foto </label>
                     <img src="<?php echo $data['peserta']->getFoto(); ?>" height="100px"/>

@@ -1,14 +1,16 @@
 <?php
-class Seleksi extends Model 
-{
+class Seleksi extends Model {
 	private $peserta;
+	private $pesertas = [];
 	private $aturan = [];
 	private $pendaftaran = [];
 	private $dataseleksi = [];
 	private $juri = [];
 	function __construct() {
-	}
-	public function setAturan(AturanSeleksi $aturan,AdminSeleksi $admin){
+		$database = DB_ENGINE;
+		$this->_db = new $database;
+		$this->_db->setTable('seleksi');}
+	public function setAturan(AturanSeleksi $aturan, AdminSeleksi $admin) {
 		$this->aturan = $aturan;
 	}
 
@@ -19,5 +21,14 @@ class Seleksi extends Model
 	public function tambahJuri(Juri $juri) {
 		$this->juri[$juri->getTugasJuri()] = $juri;
 	}
-	
+	public function getPesertas($status) {
+		$pesertas = $this->_db->Exec("select * from anggota where status = '$status'");
+		foreach ($pesertas as $p) {
+			$peserta = new Peserta;
+			$peserta->getProfile($p->email, $status);
+			$this->pesertas[] = $peserta;
+		}
+		return $this->pesertas;
+	}
+
 }

@@ -6,6 +6,7 @@ class Index_Controller extends Controller {
 	public function __construct() {
 		parent::__construct();
 		$header = new View();
+		$header->Assign('wewenang', $_SESSION['wewenang']);
 		$header->Assign('app_title', APP_TITLE);
 		$header->Assign('brand', APP_NAME);
 		$header->Assign('user', isset($_SESSION['nama']) ? $_SESSION['nama'] : '');
@@ -98,6 +99,7 @@ class Index_Controller extends Controller {
 			$peserta->setPendidikanTerakhir($_POST['pendidikanterakhir']);
 			$peserta->setPekerjaan($_POST['pekerjaan']);
 			$peserta->setInstitusi($_POST['institusi']);
+			$peserta->setJabatan($_POST['jabatan']);
 			$peserta->setFoto($fotofile);
 			if (empty($this->errors)) {
 				logs('Tidak ada error, proses request');
@@ -187,6 +189,7 @@ class Index_Controller extends Controller {
 			$dokumens[$d->tipe] = $d;
 		}
 		if (empty($result) && (count($dok) == count($daftars))) {
+			logs('Data sudah komplit, lanjut ke step3');
 			return $this->step3();
 		}
 		$this->Assign('daftar', $daftars);
@@ -196,27 +199,31 @@ class Index_Controller extends Controller {
 	}
 
 	private function step3() {
-		$this->peserta->setWewenang('s');
-		$v = new View;
-		$body = $v->Render('email/pendaftaran2', FALSE);
-		$emailtopeserta = new Email();
-		$emailtopeserta->to($this->peserta->getEmail());
-		$emailtopeserta->subject('Panita Pendaftaran peserta');
-		$emailtopeserta->body($body);
-		$emailtopeserta->sendemail();
+		if ($this->peserta->getWewenang() == 'p') {
+			$this->peserta->setWewenang('s');
+			$this->peserta->update();
+			// var_dump($this->peserta);
+			$v = new View;
+			$body = $v->Render('email/pendaftaran2', FALSE);
+			$emailtopeserta = new Email();
+			$emailtopeserta->to($this->peserta->getEmail());
+			$emailtopeserta->subject('Panita Pendaftaran peserta');
+			$emailtopeserta->body($body);
+			$emailtopeserta->sendemail();
 
-		$nrapeserta = $this->peserta->getNRA();
-		$namalengkappeserta = $this->peserta->getNamaLengkap();
-		$emailpeserta = $this->peserta->getEmail();
-		$v->Assign('nra', $nrapeserta);
-		$v->Assign('email', $emailpeserta);
-		$v->Assign('namalengkap', $namalengkappeserta);
-		$body = $v->Render('email/pendaftaran2admin', FALSE);
-		$emailtoadmin = new Email();
-		$emailtoadmin->to(MAIL_ADMIN);
-		$emailtoadmin->subject('Pendaftaran peserta Baru');
-		$emailtoadmin->body($body);
-		$emailtoadmin->sendemail();
+			$nrapeserta = $this->peserta->getNRA();
+			$namalengkappeserta = $this->peserta->getNamaLengkap();
+			$emailpeserta = $this->peserta->getEmail();
+			$v->Assign('nra', $nrapeserta);
+			$v->Assign('email', $emailpeserta);
+			$v->Assign('namalengkap', $namalengkappeserta);
+			$body = $v->Render('email/pendaftaran2admin', FALSE);
+			$emailtoadmin = new Email();
+			$emailtoadmin->to(MAIL_ADMIN);
+			$emailtoadmin->subject('Pendaftaran peserta Baru');
+			$emailtoadmin->body($body);
+			$emailtoadmin->sendemail();
+		}
 		$this->Load_View('pendaftaran/step3');
 	}
 
@@ -233,82 +240,4 @@ class Index_Controller extends Controller {
 		}
 		return $this->index();
 	}
-/*
-$pendaftaran = new Pendaftaran();
-
-$pendaftaran->tambahPeserta($peserta);
-if (isset($_FILES['berkas'])) {
-$berkas = [];
-$i = 1;
-foreach ($_FILES['berkas']['name'] as $name) {
-$berkas[$i]['name'] = $name;
-$i++;
-}
-$i = 1;
-foreach ($_FILES['berkas']['type'] as $type) {
-$berkas[$i]['type'] = $type;
-$i++;
-}
-$i = 1;
-foreach ($_FILES['berkas']['tmp_name'] as $tmpname) {
-$berkas[$i]['tmpname'] = $tmpname;
-$i++;
-}
-$i = 1;
-foreach ($_FILES['berkas']['error'] as $error) {
-$berkas[$i]['error'] = $error;
-$i++;
-}
-$i = 1;
-foreach ($_FILES['berkas']['size'] as $size) {
-$berkas[$i]['size'] = $size;
-$i++;
-}
-$i = 1;
-foreach ($berkas as $b) {
-$file_name = $b['name'];
-$arrfile = explode('.', $file_name);
-$file_ext = strtolower(end($arrfile));
-$file_tmp = $b['tmpname'];
-$fullpath = ROOT . '/public/data/berkas/' . $file_name;
-move_uploaded_file($file_tmp, $fullpath);
-
-$dokumen = new Dokumen;
-$dokumen->setTipe($i);
-$dokumen->setJudul($_POST['judulfile'][$i]);
-$dokumen->setDeskripsi($_POST['deskripsifile'][$i]);
-$dokumen->setFile($fullpath);
-$pendaftaran->tambahdokumen($dokumen);
-$i++;
-}
-}
-$pendaftaran->simpanPendaftaran();
-
-$emailtopeserta = new Email();
-$emailtopeserta->to($peserta->getEmail());
-$emailtopeserta->subject('Panita Pendaftaran peserta');
-$body = "
-<p>
-<b>Selamat</b>, pendaftaran Anda berhasil. Dokumen pendaftaran Anda akan direview oleh Panitia Pendaftaran.<br>
-Mohon bersabar, kami akan segera menghubungi via email jika data Pendaftaran Anda telah kami review.
-</p>
-";
-$emailtopeserta->body($body);
-$emailtopeserta->sendemail();
-
-$emailtoadmin = new Email();
-$emailtoadmin->to(MAIL_ADMIN);
-$emailtoadmin->subject('Pendaftaran peserta Baru');
-$body = "
-<p>
-<b>Notifikasi Pendaftaran peserta</b><br>
-NRA = $peserta->getNRA() <br>
-Nama Lengkap = $peserta->getNamaLengkap()<br>
-Email = $peserta->getEmail();
-</p>
-";
-$emailtoadmin->body($body);
-$emailtoadmin->sendemail();
- */
-
 }

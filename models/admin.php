@@ -1,7 +1,7 @@
 <?php
 class Admin extends Anggota implements IAnggota
 {
-	private $wewenang;
+	protected $wewenang;
 	public function getWewenang() {}
 	public function kirimArtikel(IArtikel $artikel){}
 	public function bacaArtikel(IArtikel $artikel){}

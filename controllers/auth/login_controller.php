@@ -15,7 +15,6 @@ class Login_Controller extends Controller {
 	}
 
 	public function index() {
-		var_dump($_POST);
 		if (!empty($_POST) && isset($_POST['login-member'])) {
 			$this->loginMember();
 		}
@@ -39,21 +38,18 @@ class Login_Controller extends Controller {
 			logs('Login error');
 			echo 'Login error';
 		}
-		$config = [
-			'id' => $userid,
-			'password' => $password,
-		];
 
-		$akun = new Anggota;
-		$akun->set($config);
+		$user = new Anggota;
+		$user->getProfile($userid);
+		$user->getAkun();
 
-		if ($akun->getPassword() !== md5($password)) {
+		if ($user->getPassword() !== $password) {
 			logs('Login gagal, Password salah');
 			session_destroy();
 			redirect(SITE_ROOT, 'index');
 		}
 		logs('Login sukses');
-		$this->setSession($akun);
+		$this->setSession($user);
 	}
 
 	private function loginSeleksi() {
@@ -61,21 +57,18 @@ class Login_Controller extends Controller {
 		$password = isset($_POST['password']) ? md5($_POST['password']) : '';
 		if ($email == '' || $password == '') {
 			logs('Login error');
-			echo 'Login error';
+			// echo 'Login error';
 		}
-		$config = [
-			'email' => $email,
-			'password' => $password,
-		];
 
-		$akun = new Akun;
+		$akun = new Peserta;
 		$akun->setEmail($email);
 		$akun->getAkun();
-
-		if ($akun->getPassword() !== md5($password)) {
+		logs('Input Password:' . $password);
+		logs('DB Password:' . $akun->getPassword());
+		if ($akun->getPassword() !== $password) {
 			logs('Login seleksi gagal, Password salah');
-			session_destroy();
-			redirect(SITE_ROOT, 'index');
+			redirect(SITE_ROOT, 'auth/logout');
+			return;
 		}
 		logs('Login seleksi sukses');
 		$this->setSession($akun);
@@ -88,8 +81,11 @@ class Login_Controller extends Controller {
 			$_SESSION['privileges'] = 'pendaftaran';
 			break;
 		case 's':
+			$pendaftaran = new Pendaftaran;
+			$pendaftaran->getPendaftaran($user);
+			var_dump($pendaftaran->getPendaftaran($user));
 			$_SESSION['id'] = $user->getEmail();
-			$_SESSION['privileges'] = 'seleksi';
+			$_SESSION['privileges'] = empty($pendaftaran->getPendaftaran($user)) ? 'pendaftaran' : 'seleksi';
 			break;
 		case '0':
 			$_SESSION['id'] = $user->getNRA();
@@ -97,18 +93,21 @@ class Login_Controller extends Controller {
 			$_SESSION['email'] = $user->getEmail();
 			$_SESSION['privileges'] = 'anggota';
 			break;
-		case '1,2,3':
+		case '1':
 			$_SESSION['id'] = $user->getNRA();
 			$_SESSION['nama'] = $user->getNamaLengkap();
 			$_SESSION['email'] = $user->getEmail();
 			$_SESSION['privileges'] = 'admin';
+			logs('sebagai admin');
 			break;
 		default:
 			session_destroy();
-			redirect(SITE_ROOT, 'index');
+			redirect(SITE_ROOT, 'auth/logout');
+			return;
 			break;
 		}
 		$_SESSION['time'] = time();
+		$_SESSION['wewenang'] = $user->getWewenang();
 		$_SESSION['path'] = $_SESSION['privileges'] . '/index';
 		redirect(SITE_ROOT, $_SESSION['path']);
 	}

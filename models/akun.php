@@ -17,7 +17,7 @@ class Akun extends Model {
 		$this->email = $email;
 	}
 	public function setPassword($password) {
-		$this->password = md5($password);
+		$this->password = $password;
 		return $this;
 	}
 	public function setWewenang($wewenang) {
@@ -37,7 +37,7 @@ class Akun extends Model {
 	}
 
 	public function verifyPassword($konfirmasi) {
-		if ($this->password === md5($konfirmasi)) {
+		if ($this->password === $konfirmasi) {
 			return true;
 		}
 
@@ -48,6 +48,16 @@ class Akun extends Model {
 		$data['email'] = $this->email;
 		$data['password'] = md5($this->password);
 		return $this->_db->create($data);
+	}
+	public function update() {
+		logs('akun->this->password: ' . $this->password);
+		$data = [
+			'email' => $this->email,
+			'password' => $this->password,
+			'wewenang' => $this->wewenang,
+		];
+		$this->_db->setTable('akun');
+		return $this->_db->create($data, 'update');
 	}
 	public function getAkun($wewenang = '') {
 		$sql = "select * from akun where email = '$this->email' ";

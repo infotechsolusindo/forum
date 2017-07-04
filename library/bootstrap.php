@@ -183,7 +183,7 @@ function checkSession() {
 		return false;
 	}
 	$user = new Anggota;
-	$user->getProfile($_SESSION['id'], 'D');
+	$user->getProfile($_SESSION['id'], 'A');
 	switch ($user->getWewenang()) {
 	case '0':
 		$wewenang = 'anggota';
@@ -204,8 +204,9 @@ function checkSession() {
 		return false;
 		break;
 	}
-	if (isset($_SESSION['privilages'])) {
-		if ($_SESSION['privilages'] !== $wewenang) {
+	logs('wewenang:' . $wewenang);
+	if (isset($_SESSION['privileges'])) {
+		if ($_SESSION['privileges'] !== $wewenang) {
 			return false;
 		}
 

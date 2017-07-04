@@ -10,6 +10,7 @@ class Index_Controller extends Controller {
 		}
 
 		$header = new View();
+		$header->Assign('wewenang', $_SESSION['wewenang']);
 		$header->Assign('app_title', APP_TITLE);
 		$header->Assign('brand', APP_NAME);
 		$header->Assign('user', $_SESSION['nama']);

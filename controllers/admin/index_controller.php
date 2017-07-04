@@ -1,6 +1,6 @@
 <?php
 class Index_Controller extends Controller {
-
+	private $pendaftaran = [];
 	public function __construct() {
 		parent::__construct();
 		if (!checkSession()) {
@@ -9,10 +9,11 @@ class Index_Controller extends Controller {
 		}
 
 		$header = new View();
+		$header->Assign('wewenang', $_SESSION['wewenang']);
 		$header->Assign('app_title', APP_TITLE);
 		$header->Assign('brand', APP_NAME);
 		$header->Assign('user', $_SESSION['nama']);
-		$header->Assign('tabmenu', 'anggota');
+		$header->Assign('tabmenu', 'admin');
 		$this->Assign('header', $header->Render('header', false));
 
 		$footer = new View();
@@ -20,26 +21,44 @@ class Index_Controller extends Controller {
 
 		$module_sidebanner = new Module();
 		$this->Assign('side_banner', $module_sidebanner->Render());
-		$module_left = new Module(['karir-side', 'links-side']);
-		$this->Assign('module_left', $module_left->Render());
 		$module_right = new Module(['members_list', 'populer', 'forum-side']);
 		$this->Assign('module_right', $module_right->Render());
 		$module_banner = new Module([]);
 		$this->Assign('module_banner', $module_banner->Render());
-		$module_main = new Module([/*'artikel-form','daftar-artikel'*/]);
-		$this->Assign('module_main', $module_main->Render());
 	}
 
 	public function index() {
-		$this->Load_View('index');
+		$module_main = new Module(['admin-daftarpendaftaran', 'admin-daftarpeserta']);
+		$this->Assign('module_main', $module_main->Render());
+		$this->Load_View('admin/index');
 	}
-	public function daftarblanko() {
+	public function formulir() {
+		$module_main = new Module(['karir-side']);
+		$this->Assign('module_main', $module_main->Render());
+		$this->Load_View('admin/index');
+	}
+	public function pendaftaran($action, $data) {
+		$pendaftaran = new Pendaftaran;
+		switch ($action) {
+		case 'terima':
+			$pendaftaran->setStatus($data, '1');
+			$peserta = new Peserta;
+			$peserta->getProfile($data);
+			$v = new View;
+			$v->Assign('nra', $peserta->getNRA());
+			$v->Assign('namalengkap', $peserta->getNamaLengkap());
+			$v->Assign('email', $peserta->getEmail());
+			$body = $v->Render('email/otorisasipendaftaran', FALSE);
+			$email = new Email();
+			$email->to($data);
+			$email->subject('Pendaftaran peserta Baru');
+			$email->body($body);
+			$email->sendemail();
+			break;
+		default:
 
+			break;
+		}
+		$this->index();
 	}
-	public function about($data) {
-		$this->Load_View('about');
-		$this->Assign('heading', 'Tentang ' . APP_NAME);
-		$this->Assign('content', ' Donec id ....');
-	}
-
 }

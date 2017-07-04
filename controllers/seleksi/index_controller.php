@@ -36,7 +36,8 @@ class Index_Controller extends Controller {
 		$result = $pendaftaran->getPendaftaran($peserta);
 		if (empty($result)) {
 			$this->Load_View('error');
+			return;
 		}
-		$this->Load_View('capaska/index');
+		$this->Load_View('seleksi/index');
 	}
 }

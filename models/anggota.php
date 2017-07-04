@@ -175,6 +175,30 @@ class Anggota extends Akun {
 		];
 		return $this->_db->create($data);
 	}
+	public function update() {
+		parent::update();
+		$this->_db->setTable('anggota');
+		$data = [
+			'nra' => $this->nra,
+			'namalengkap' => $this->namalengkap,
+			'namapanggilan' => $this->namapanggilan,
+			'angkatan' => $this->angkatan,
+			'jeniskelamin' => $this->jeniskelamin,
+			'tempatlahir' => $this->tempatlahir,
+			'tgllahir' => $this->tgllahir,
+			'nomerponsel' => $this->nomerponsel,
+			'alamatdomisili' => $this->alamatdomisili,
+			'wilayah' => $this->wilayah,
+			'pendidikanterakhir' => $this->pendidikanterakhir,
+			'pekerjaan' => $this->pekerjaan,
+			'institusi' => $this->institusi,
+			'jabatan' => $this->jabatan,
+			'foto' => $this->foto,
+			'status' => $this->status,
+			'email' => $this->email,
+		];
+		return $this->_db->create($data, 'update');
+	}
 	public function set($nra) {
 		$this->_db->setTable('anggota');
 		$anggota = $this->_db->Exec("select * from akun,anggota where akun.email = anggota.email and anggota.nra = '$nra[id]'");
@@ -201,8 +225,11 @@ class Anggota extends Akun {
 	public function getProfile($email, $status = 'A') {
 		$result = $this->_db->Exec("select * from akun inner join anggota on anggota.email = akun.email where anggota.email = '$email' and status = '$status'");
 		if (empty($result)) {
-			logs(__CLASS__ . ' tidak ditemukan');
-			return false;
+			$result = $this->_db->Exec("select * from akun inner join anggota on anggota.email = akun.email where anggota.nra = '$email' and status = '$status'");
+			if (empty($result)) {
+				logs(__CLASS__ . ' tidak ditemukan');
+				return false;
+			}
 		}
 		$anggota = $result[0];
 		$this->setEmail($anggota->email);

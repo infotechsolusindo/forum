@@ -39,4 +39,15 @@ class Pendaftaran extends Model {
 		}
 		return $this->_db->Exec($sql);
 	}
+	public function getPendaftaranBaru() {
+		$sql = "select anggota.*,pendaftaran.*,wilayah.nama as wilayah
+			from pendaftaran
+			inner join anggota on anggota.email = pendaftaran.peserta
+			left join wilayah on wilayah.id = anggota.wilayah
+			where pendaftaran.status = '0' ";
+		return $this->_db->Exec($sql);
+	}
+	public function setStatus($peserta, $status) {
+		return $this->_db->Exec("update pendaftaran set status = '$status' where peserta = '$peserta'");
+	}
 }

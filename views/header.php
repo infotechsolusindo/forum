@@ -30,8 +30,11 @@
     <!-- End Logo + Top Nav -->
     <!-- Main Nav -->
     <?php
-$beranda = $anggota = $forum = $karir = $kegiatan = "";
+$beranda = $admin = $anggota = $forum = $karir = $kegiatan = "";
 switch ($data['tabmenu']) {
+case 'admin':
+	$admin = 'class="active"';
+	break;
 case 'anggota':
 	$anggota = 'class="active"';
 	break;
@@ -52,6 +55,9 @@ default:
     <div id="navigation">
       <ul>
         <li><a href="/" <?php echo $beranda; ?>><span>Beranda</span></a></li>
+      <?php if (isset($data['wewenang']) && $data['wewenang'] > 0) {?>
+        <li><a href="?url=admin/index" <?php echo $admin; ?>><span>Admin</span></a></li>
+      <?php }?>
         <li><a href="?url=anggota/index" <?php echo $anggota; ?>><span>Anggota</span></a></li>
         <li><a href="?url=anggota/forum" <?php echo $forum; ?>><span>Forum</span></a></li>
         <li><a href="?url=anggota/karir" <?php echo $karir; ?>><span>Karir</span></a></li>

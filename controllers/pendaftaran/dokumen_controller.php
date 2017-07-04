@@ -7,6 +7,7 @@ class Dokumen_Controller extends Controller {
 	public function __construct() {
 		parent::__construct();
 		$header = new View();
+		$header->Assign('wewenang', $_SESSION['wewenang']);
 		$header->Assign('app_title', APP_TITLE);
 		$header->Assign('brand', APP_NAME);
 		$header->Assign('user', isset($_SESSION['nama']) ? $_SESSION['nama'] : '');
