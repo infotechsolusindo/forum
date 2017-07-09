@@ -8,7 +8,7 @@
 			<input type="hidden" name="login-member">
 			<div class="form">
 				<div class="form-group">
-				<input type="text" name="id" placeholder="ID NRA" class="form-control">
+				<input type="text" name="id" placeholder="Email" class="form-control">
 				</div>
 				<div class="form-group">
 				<input type="password" name="password" placeholder="Password" class="form-control">

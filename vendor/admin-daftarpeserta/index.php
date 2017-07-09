@@ -16,7 +16,7 @@
       </thead>
       <tbody>
       <?php foreach ($data->pesertas as $p) {
-	?>
+    ?>
         <tr>
           <td><?php echo $p->getNamaLengkap(); ?></td>
           <td><?php echo $p->getEmail(); ?></td>
@@ -24,22 +24,22 @@
           <td>
       <?php
 switch ($p->getStatus()) {
-	case 'A':
-		echo "Aktif";
-		break;
-	case 'B':
-		echo "Blocked";
-		break;
-	case 'C':
-		echo "Dihapus";
-		break;
-	case 'D':
-		echo "Non Aktif";
-		break;
-	default:
-		echo "unknown";
-		break;
-	}?>
+    case 'A':
+        echo "Aktif";
+        break;
+    case 'B':
+        echo "Blocked";
+        break;
+    case 'C':
+        echo "Dihapus";
+        break;
+    case 'D':
+        echo "Non Aktif";
+        break;
+    default:
+        echo "unknown";
+        break;
+    }?>
           </td>
           <td width="200px">
             <a href="?url=admin/index&mod=admindaftarpeserta/detail/<?php echo $p->getEmail(); ?>" class="btn btn-success btn-xs">Lihat</a>
@@ -54,7 +54,7 @@ switch ($p->getStatus()) {
   </div>
 </div>
 <div id="form">
-  <table class="table">
+  <table class="table" width="600px">
     <tr>
       <td>NRA</td><td><input type="text" name="nra"></td>
     </tr>

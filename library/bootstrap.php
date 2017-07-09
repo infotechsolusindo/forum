@@ -178,12 +178,17 @@ function logs($msg) {
 function checkSession() {
 	/* BYPASS LOGIN */
 	// return true;
-
+        logs('Check this session');
 	if (!isset($_SESSION['id'])) {
-		return false;
+            logs('Error: Session tidak ditemukan');
+	    return false;
 	}
 	$user = new Anggota;
 	$user->getProfile($_SESSION['id'], 'A');
+        if($user->getEmail()==''){
+            logs('Error: user tidak berhak atau tidak terdaftar di sistem!');
+            return false;
+        }
 	switch ($user->getWewenang()) {
 	case '0':
 		$wewenang = 'anggota';
@@ -204,7 +209,7 @@ function checkSession() {
 		return false;
 		break;
 	}
-	logs('wewenang:' . $wewenang);
+	logs('W:' . $user->getWewenang() . ' ' . $wewenang);
 	if (isset($_SESSION['privileges'])) {
 		if ($_SESSION['privileges'] !== $wewenang) {
 			return false;

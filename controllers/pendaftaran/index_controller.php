@@ -222,7 +222,8 @@ class Index_Controller extends Controller {
 			$emailtoadmin->to(MAIL_ADMIN);
 			$emailtoadmin->subject('Pendaftaran peserta Baru');
 			$emailtoadmin->body($body);
-			$emailtoadmin->sendemail();
+			$send = $emailtoadmin->sendemail();
+                        logs($send);
 		}
 		$this->Load_View('pendaftaran/step3');
 	}

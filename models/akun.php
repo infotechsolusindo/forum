@@ -47,6 +47,7 @@ class Akun extends Model {
 		$data['created'] = date('Y-m-d h:m:s');
 		$data['email'] = $this->email;
 		$data['password'] = md5($this->password);
+		$this->_db->setTable('akun');
 		return $this->_db->create($data);
 	}
 	public function update() {

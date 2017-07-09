@@ -88,13 +88,13 @@ class Login_Controller extends Controller {
 			$_SESSION['privileges'] = empty($pendaftaran->getPendaftaran($user)) ? 'pendaftaran' : 'seleksi';
 			break;
 		case '0':
-			$_SESSION['id'] = $user->getNRA();
+			$_SESSION['id'] = $user->getEmail();
 			$_SESSION['nama'] = $user->getNamaLengkap();
 			$_SESSION['email'] = $user->getEmail();
 			$_SESSION['privileges'] = 'anggota';
 			break;
 		case '1':
-			$_SESSION['id'] = $user->getNRA();
+			$_SESSION['id'] = $user->getEmail();
 			$_SESSION['nama'] = $user->getNamaLengkap();
 			$_SESSION['email'] = $user->getEmail();
 			$_SESSION['privileges'] = 'admin';

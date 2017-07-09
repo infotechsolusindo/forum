@@ -87,7 +87,8 @@ class Index_Controller extends Controller {
 					$emailtocapaska->to($akun->getEmail());
 					$emailtocapaska->subject('Permintaan Pendaftaran Baru');
 					$emailtocapaska->body($body);
-					$emailtocapaska->sendemail();
+                                        $mc = $emailtocapaska->sendemail();
+                                        logs('Mail to Capaska : '.$mc);
 
 					$this->Assign('successMessage', 'Pendaftaran berhasil. Silahkan menunggu email dari kami');
 					$akun->setEmail('');
