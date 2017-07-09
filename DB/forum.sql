@@ -25,22 +25,13 @@ DROP TABLE IF EXISTS `_spool`;
 CREATE TABLE `_spool` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ctime` timestamp NULL DEFAULT NULL,
-  `etime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `procname` varchar(10) NOT NULL,
-  `status` enum('0','1','2','3') DEFAULT '0',
+  `etime` timestamp NULL DEFAULT NULL,
+  `procname` varchar(50) NOT NULL,
+  `data` blob,
+  `status` char(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_spool`
---
-
-LOCK TABLES `_spool` WRITE;
-/*!40000 ALTER TABLE `_spool` DISABLE KEYS */;
-INSERT INTO `_spool` VALUES (1,'2017-07-03 23:45:01','2017-07-04 00:02:44','email','1'),(2,'2017-07-03 23:45:22','2017-07-04 00:02:45','email','1'),(3,'2017-07-03 23:45:30','2017-07-04 00:02:46','email','1'),(4,'2017-07-03 23:46:55','2017-07-04 00:02:47','email','1'),(5,'2017-07-03 23:46:57','2017-07-04 00:02:48','email','1'),(6,'2017-07-03 23:46:58','2017-07-04 00:02:49','email','1');
-/*!40000 ALTER TABLE `_spool` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `akun`
@@ -179,17 +170,8 @@ CREATE TABLE `dokumen` (
   `file` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`iddokumen`),
   UNIQUE KEY `idx0` (`tipe`,`peserta`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dokumen`
---
-
-LOCK TABLES `dokumen` WRITE;
-/*!40000 ALTER TABLE `dokumen` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dokumen` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `formulir`
@@ -392,17 +374,8 @@ CREATE TABLE `pendaftaran` (
   PRIMARY KEY (`idpendaftaran`),
   UNIQUE KEY `peserta` (`peserta`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pendaftaran`
---
-
-LOCK TABLES `pendaftaran` WRITE;
-/*!40000 ALTER TABLE `pendaftaran` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pendaftaran` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `seleksi`
@@ -465,7 +438,7 @@ CREATE TABLE `wilayah` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `nama` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,4 +460,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-04  7:14:17
+-- Dump completed on 2017-07-09 23:48:33
