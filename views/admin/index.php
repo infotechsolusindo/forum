@@ -4,10 +4,9 @@
       <div class="row">
       <center>
         <a href="?url=admin/index">Admin</a> |
-        <a href="?url=admin/index/formulir">Formulir</a> |
+        <a href="?url=admin/index/formulir">Tahap Seleksi</a> |
         <a href="?url=admin/index/wilayah">Wilayah</a> |
-        <a href="?url=admin/index/aturan">Aturan</a> |
-        <a href="?url=admin/index/pendaftaran">Pendaftaran</a>
+        <a href="?url=admin/index/aturan">Aturan</a>
         </center>
       </div>
       <?php if ($data['successMessage']) {?>

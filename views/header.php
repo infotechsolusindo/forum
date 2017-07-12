@@ -30,38 +30,45 @@
     <!-- End Logo + Top Nav -->
     <!-- Main Nav -->
     <?php
-$beranda = $admin = $anggota = $forum = $karir = $kegiatan = "";
+$beranda = $admin = $peserta = $anggota = $forum = $karir = $kegiatan = "";
 switch ($data['tabmenu']) {
 case 'admin':
-	$admin = 'class="active"';
-	break;
+    $admin = 'class="active"';
+    break;
 case 'anggota':
-	$anggota = 'class="active"';
-	break;
+    $anggota = 'class="active"';
+    break;
+case 'peserta':
+    $peserta = 'class="active"';
+    break;
 case 'forum':
-	$forum = 'class="active"';
-	break;
+    $forum = 'class="active"';
+    break;
 case 'karir':
-	$karir = 'class="active"';
-	break;
+    $karir = 'class="active"';
+    break;
 case 'kegiatan':
-	$kegiatan = 'class="active"';
-	break;
+    $kegiatan = 'class="active"';
+    break;
 default:
-	$beranda = 'class="active"';
-	break;
+    $beranda = 'class="active"';
+    break;
 }
 ?>
     <div id="navigation">
       <ul>
         <li><a href="/" <?php echo $beranda; ?>><span>Beranda</span></a></li>
       <?php if (isset($data['wewenang']) && $data['wewenang'] > 0) {?>
-        <li><a href="?url=admin/index" <?php echo $admin; ?>><span>Admin</span></a></li>
+        <li><a href="?url=admin/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
       <?php }?>
+      <?php if (isset($data['wewenang']) && $data['wewenang'] == 's') {?>
+        <li><a href="?url=seleksi/index" <?php echo $peserta; ?>><span>Peserta</span></a></li>
+      <?php } else {?>
         <li><a href="?url=anggota/index" <?php echo $anggota; ?>><span>Anggota</span></a></li>
         <li><a href="?url=anggota/forum" <?php echo $forum; ?>><span>Forum</span></a></li>
         <li><a href="?url=anggota/karir" <?php echo $karir; ?>><span>Karir</span></a></li>
         <li><a href="?url=anggota/kegiatan" <?php echo $kegiatan; ?>><span>Kegiatan</span></a></li>
+      <?php }?>
       </ul>
     </div>
     <!-- End Main Nav -->

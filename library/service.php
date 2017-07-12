@@ -23,12 +23,12 @@ class Service extends Model {
             if (isset($result->error)) {
                 return $result->error;
             }
-            logs('Run task : ' . $result[0]->procname);
+            logs('Run    :[ID=' . $result[0]->id . '],[ProcName:' . $result[0]->procname) . ']';
             $status = $result[0]->id;
             $this->_db->Exec("update _spool set status = '1' where id = $status", null, true);
             $run = $worker->run;
             $run($result[0]->data);
-            logs('Finish ');
+            logs('Finish :[ID=' . $result[0]->id . '],[ProcName:' . $result[0]->procname) . ']';
         }
     }
 }
