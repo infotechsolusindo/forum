@@ -1,6 +1,10 @@
 <?php echo $data['header']; ?>
     <!-- Container -->
     <div id="container">
+      <div>
+        <a href="">Penilaian</a> |
+        <a href="">Rekap</a>
+      </div>
       <?php if ($data['successMessage']) {?>
       <!-- Message OK -->
       <div id="successMessage" class="msg msg-ok">

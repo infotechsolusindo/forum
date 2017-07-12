@@ -2,7 +2,7 @@
 /**
  *
  */
-class Index_Controller extends Controller {
+class Peserta_Controller extends Controller {
 
     function __construct() {
         parent::__construct();
@@ -11,7 +11,7 @@ class Index_Controller extends Controller {
         $header->Assign('app_title', APP_TITLE);
         $header->Assign('brand', APP_NAME);
         $header->Assign('user', isset($_SESSION['nama']) ? $_SESSION['nama'] : '');
-        $header->Assign('tabmenu', '');
+        $header->Assign('tabmenu', 'peserta');
         $this->Assign('header', $header->Render('header', false));
 
         $footer = new View();
@@ -41,6 +41,9 @@ class Index_Controller extends Controller {
             return;
         }
         $this->Assign('peserta', $peserta);
-        $this->Load_View('seleksi/index');
+        $this->Load_View('seleksi/peserta');
+    }
+    public function detailSeleksi($tahap) {
+        $this->Load_View('seleksi/detailpeserta');
     }
 }

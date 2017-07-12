@@ -2,7 +2,7 @@
 /**
  *
  */
-class Index_Controller extends Controller {
+class Juri_Controller extends Controller {
 
     function __construct() {
         parent::__construct();
@@ -11,7 +11,7 @@ class Index_Controller extends Controller {
         $header->Assign('app_title', APP_TITLE);
         $header->Assign('brand', APP_NAME);
         $header->Assign('user', isset($_SESSION['nama']) ? $_SESSION['nama'] : '');
-        $header->Assign('tabmenu', '');
+        $header->Assign('tabmenu', 'juri');
         $this->Assign('header', $header->Render('header', false));
 
         $footer = new View();
@@ -30,17 +30,20 @@ class Index_Controller extends Controller {
         $this->Assign('module_main', $module_main->Render());
     }
     public function index() {
-        $peserta = new Peserta;
-        $peserta->getProfile($_SESSION['id'], 'D');
+        // $peserta = new Peserta;
+        // $peserta->getProfile($_SESSION['id'], 'D');
 
-        $pendaftaran = new Pendaftaran;
-        $result = $pendaftaran->getPendaftaran($peserta);
-        if (empty($result)) {
-            session_destroy();
-            $this->Load_View('error');
-            return;
-        }
-        $this->Assign('peserta', $peserta);
-        $this->Load_View('seleksi/index');
+        // $pendaftaran = new Pendaftaran;
+        // $result = $pendaftaran->getPendaftaran($peserta);
+        // if (empty($result)) {
+        //     session_destroy();
+        //     $this->Load_View('error');
+        //     return;
+        // }
+        // $this->Assign('peserta', $peserta);
+        // $this->Load_View('seleksi/peserta');
+    }
+    public function detailSeleksi($tahap) {
+        $this->Load_View('seleksi/detailpeserta');
     }
 }
