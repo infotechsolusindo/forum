@@ -10,7 +10,7 @@ include ROOT.'/models/juri.php';
 
 include ROOT.'/models/artikel.php';
 include ROOT.'/models/iartikel.php';
-include ROOT.'/models/aturanseleksi.php';
+include ROOT.'/models/tahapanseleksi.php';
 include ROOT.'/models/dokumen.php';
 include ROOT.'/models/formulir.php';
 include ROOT.'/models/forum.php';

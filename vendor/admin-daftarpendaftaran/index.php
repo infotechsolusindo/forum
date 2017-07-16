@@ -20,7 +20,10 @@
           <td><?php echo $p->tanggal; ?></td>
           <td><?php echo $p->namalengkap; ?></td>
           <td><?php echo $p->peserta; ?></td>
-          <td><a href="?url=admin/index/pendaftaran/terima/<?php echo $p->peserta; ?>" class="btn btn-success btn-xs">Seleksi</a></td>
+          <td>
+          <a href="?url=admin/index/peserta/<?php echo $p->peserta; ?>" class="btn btn-success btn-xs">Lihat</a>
+          <a href="?url=admin/index/pendaftaran/terima/<?php echo $p->peserta; ?>" class="btn btn-success btn-xs">Setujui</a>
+          </td>
         </tr>
       <?php }?>
       </tbody>

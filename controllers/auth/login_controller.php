@@ -76,30 +76,36 @@ class Login_Controller extends Controller {
 
     private function setSession($user) {
         switch ($user->getWewenang()) {
-        case 'p':
+        case 'p': //Calon Peserta Seleksi
             $_SESSION['id'] = $user->getEmail();
             $_SESSION['privileges'] = 'pendaftaran';
             break;
-        case 's':
+        case 's': //Peserta Seleksi
             $pendaftaran = new Pendaftaran;
             $pendaftaran->getPendaftaran($user);
             var_dump($pendaftaran->getPendaftaran($user));
             $_SESSION['id'] = $user->getEmail();
             $_SESSION['privileges'] = empty($pendaftaran->getPendaftaran($user)) ? 'pendaftaran' : 'seleksi';
             break;
-        case '0':
+        case '0': //Anggota
             $_SESSION['id'] = $user->getEmail();
             $_SESSION['nama'] = $user->getNamaLengkap();
             $_SESSION['email'] = $user->getEmail();
             $_SESSION['privileges'] = 'anggota';
             break;
-        case '1':
+        case '1': //Admin
             $_SESSION['id'] = $user->getEmail();
             $_SESSION['nama'] = $user->getNamaLengkap();
             $_SESSION['email'] = $user->getEmail();
             $_SESSION['privileges'] = 'admin';
             logs('sebagai admin');
             break;
+        case '2': //Juri
+            $_SESSION['id'] = $user->getEmail();
+            $_SESSION['nama'] = $user->getNamaLengkap();
+            $_SESSION['email'] = $user->getEmail();
+            $_SESSION['privileges'] = 'juri';
+            logs('sebagai juri');
         default:
             session_destroy();
             redirect(SITE_ROOT, 'auth/logout');

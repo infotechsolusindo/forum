@@ -28,7 +28,7 @@ class Index_Controller extends Controller {
     }
 
     public function index() {
-        $module_main = new Module(['admin-daftarpendaftaran', 'admin-daftarpeserta']);
+        $module_main = new Module(['admin-daftarpendaftaran' /*, 'admin-daftarpeserta'*/]);
         $this->Assign('module_main', $module_main->Render());
         $this->Load_View('admin/index');
     }
@@ -63,6 +63,23 @@ class Index_Controller extends Controller {
     }
     public function seleksi() {
         $this->Load_View('admin/seleksi');
+    }
+    public function peserta($id) {
+        $module_main = new Module();
+        $this->Assign('module_main', $module_main->Render());
+
+        $peserta = new Peserta;
+        $peserta->getProfile($id, 'D', 's');
+        $this->Assign('namalengkap', $peserta->getnamalengkap());
+        $this->Assign('alamatdomisili', $peserta->getalamatdomisili());
+        $this->Assign('email', $peserta->getemail());
+        $this->Assign('tgllahir', $peserta->gettgllahir());
+        $this->Assign('foto', $peserta->getfoto());
+
+        $dokumens = new Dokumen;
+        $d = $dokumens->getDokumens($peserta->getEmail());
+        $this->Assign('dokumens', $d);
+        $this->Load_View('admin/peserta-detail');
     }
 
 }

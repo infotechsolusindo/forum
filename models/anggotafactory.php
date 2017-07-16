@@ -29,7 +29,7 @@ class AnggotaFactory extends Model {
             $where[] = "pendidikanterakhir = '$this->pendidikanterakhir'";
         }
         if ($this->angkatan != '') {
-            $where[] = 'angkatan = $this->angkatan';
+            $where[] = "angkatan = $this->angkatan";
         }
         $options = join($where, ' and ');
         $sql = "$sql where $options";

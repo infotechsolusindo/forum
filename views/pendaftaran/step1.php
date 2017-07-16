@@ -33,11 +33,11 @@
                     <input type="hidden" name="email" value="<?php echo $data['peserta']->getEmail(); ?>" />
                     <label><?php echo $data['peserta']->getEmail(); ?></label>
                   </p>
-                  <p>
-                    <!-- <span class="req"></span> -->
-                    <label>NRA <span></span></label>
-                    <input type="text" name="nra" class="field size1" value="<?php echo $data['peserta']->getNRA(); ?>" />
-                  </p>
+<!--                   <p>
+  <span class="req"></span>
+  <label>NRA <span></span></label>
+  <input type="text" name="nra" class="field size1" value="<?php echo $data['peserta']->getNRA(); ?>" />
+</p> -->
                   <p>
                     <span class="req"></span>
                     <label>Nama Panggilan <span></span></label>
@@ -90,7 +90,7 @@
                     <input type="text" name="alamatdomisili" class="field size1" value="" />
                     <select name="wilayah" class="field size1">
                     <?php foreach ($data['wilayah'] as $wilayah) {
-	?>
+    ?>
                       <option value="<?php echo $wilayah->id; ?>" <?=($data['wilayahselect'] == $wilayah->id) ? "selected='selected'" : '';?>><?php echo $wilayah->nama; ?></option>
                     <?php }?>
                     </select>
