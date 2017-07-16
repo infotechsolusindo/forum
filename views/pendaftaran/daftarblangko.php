@@ -1,20 +1,20 @@
-<?php echo $data['header'];?>
+<?php echo $data['header']; ?>
     <!-- Container -->
     <div id="container">
-      <?php if(!empty($data['successMessage'])){?>
+      <?php if (!empty($data['successMessage'])) {?>
       <!-- Message OK -->
       <div id="successMessage" class="msg msg-ok">
         <p><strong>Your file was uploaded succesifully!</strong></p>
         <a href="#" class="close">close</a> </div>
       <!-- End Message OK -->
-      <?php } ?>
-      <?php if(!empty($data['errorMessage'])){?>
+      <?php }?>
+      <?php if (!empty($data['errorMessage'])) {?>
       <!-- Message Error -->
       <div id="errorMessage" class="msg msg-error">
-        <p><strong><?php echo join($data['errorMessage'],'<br>');?></strong></p>
+        <p><strong><?php echo join($data['errorMessage'], '<br>'); ?></strong></p>
         <a href="#" class="close">close</a> </div>
       <!-- End Message Error -->
-      <?php } ?>
+      <?php }?>
       <div class="row">
         <div id="main" class="col-md-10 col-sm-10">
           <div class="panel panel-primary">
@@ -22,7 +22,7 @@
               <div class="pull-left">
                 <h2>Pendaftaran Anggota PASKIBRAKA</h2>
               </div>
-              <form action="/">
+              <form action="<?php echo SITE_ROOT; ?>">
               <div class="pull-right">
                 <label><i class="glyphicon glyphicon-arrow-left"></i></label>
                 <input type="submit" class="button" value="Kembali" />
@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="col-md-2 col-sm-2">
-          <?php echo $data['module_right'];?>
+          <?php echo $data['module_right']; ?>
         </div>
       </div>
     </div>
@@ -72,4 +72,4 @@
         // $('#daftardokumen').append(b);
       });
     </script>
-<?php echo $data['footer'];?>
+<?php echo $data['footer']; ?>

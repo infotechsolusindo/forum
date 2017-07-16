@@ -6,7 +6,7 @@ create table tahapanseleksi(
 	item varchar(30) not null, 
 	deskripsi varchar(100),
 	juri varchar(50) not null
-)
+);
 create table penilaian(
     id int auto_increment primary key,
     totalnilai int null
