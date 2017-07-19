@@ -44,14 +44,16 @@ class Seleksi extends Model {
     }
 
     public function getSemuaPendaftaran($angkatan) {
-        $admin = new AdminSeleksi;
-        $admin->getAdminProfile($_SESSION['id']);
-        $juri = $admin->getEmail();
+        // $admin = new AdminSeleksi;
+        // $admin->getAdminProfile($_SESSION['id']);
+        // $juri = $admin->getEmail();
         $sql = "select * from pendaftaran where status = '1'";
         $result = $this->_db->Exec($sql);
         $nra = '';
         $i = 1;
         foreach ($result as $r) {
+            $this->_db->Exec("insert into penilaian value(null,0)");
+            $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
             $peserta = new Peserta;
             $peserta->getProfile($r->peserta, 'D', 's');
             $email = $peserta->getEmail();
@@ -65,9 +67,9 @@ class Seleksi extends Model {
             if ($peserta->getAngkatan() != $angkatan) {
                 continue;
             }
-            if ($peserta->getWilayah() != $_POST['wilayah']) {
-                continue;
-            }
+            //if ($peserta->getWilayah() != $_POST['wilayah']) {
+            //    continue;
+            //}
             // switch ($_POST['jeniskelamin']) {
             // case 'L':if ($peserta->getJenisKelamin() !== 'L');
             //     continue;
@@ -85,7 +87,6 @@ class Seleksi extends Model {
             // }
             $query = $this->_db->Exec("select max(nra) as maxnra from anggota where nra like 'C-$angkatan-%' ");
             $lastid = !is_null($query) ? $query[0]->maxnra : false;
-            var_dump($query);
             logs('peserta:' . $email . ' lastid:' . $lastid);
             if (!$lastid) {
                 $idxnra = 1;
@@ -94,7 +95,7 @@ class Seleksi extends Model {
                 $idxnra++;
             }
             $nra = 'C-' . $angkatan . '-' . $idxnra;
-            $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where juri = '$juri' and angkatan = $angkatan and tahap = $_POST[tahap]");
+            $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $_POST[tahap]");
 
             $i++;
             $this->_db->Exec("update anggota set nra = '$nra' where email = '$email'");
@@ -107,12 +108,16 @@ class Seleksi extends Model {
                     'wilayah' => $peserta->getWilayah(),
                     'tahap' => $ts->tahap,
                     'item' => $ts->item,
-                    'idjuri' => $juri,
+                    'idjuri' => $ts->juri,
+                    'idpenilaian' => (int) $penilaian[0]->id,
                 ];
                 $this->_db->create($data);
             }
         }
 
+    }
+    public function cekNilaiTahapSebelumnya($idpeserta, $tahap) {
+        if ($tahap <= 1) {return;}
     }
     public function getSemuaPenilaian($angkatan = null, $peserta = null, $juri = null) {
         $sql = "select * from seleksi ";
@@ -144,6 +149,32 @@ class Seleksi extends Model {
     public function updateNilai($idpeserta, $angkatan, $juri, $tahap, $item, $nilai) {
         $sql = "update seleksi set nilai = $nilai where idpeserta = '$idpeserta' and angkatan = $angkatan and idjuri = '$juri' and tahap = $tahap and item = '$item'";
         return $this->_db->Exec($sql);
+    }
+    public function updateHasil($idpeserta, $angkatan, $tahap) {
+        $allseleksi = "select sum(nilai) as jumlah,(select count(*) from tahapanseleksi where angkatan = $angkatan ) as total, idpenilaian from seleksi where idpeserta = '$idpeserta' and angkatan = $angkatan and tahap = $tahap group by idpenilaian";
+        $resseleksi = $this->_db->Exec($allseleksi);
+        if (!empty($resseleksi)) {
+            $jumlah = $resseleksi[0]->jumlah;
+            logs($jumlah);
+            $total = $resseleksi[0]->total;
+            logs($total);
+            $rata = $jumlah / $total;
+            logs($rata);
+            $idpenilaian = $resseleksi[0]->idpenilaian;
+            return $this->_db->Exec("update penilaian set totalnilai = $rata where id = $idpenilaian");
+        }
+    }
+    public function hasilPenilaian($angkatan, $tahapan) {
+        foreach ($tahapan as $t) {
+            $sql = "select distinct idpeserta,totalnilai from seleksi join penilaian on penilaian.id = seleksi.idpenilaian where angkatan = $angkatan and tahap = $t->tahap";
+            $rtahap = $this->_db->Exec($sql);
+            foreach ($rtahap as $dt) {
+                $datatahap[$dt->idpeserta][$t->tahap] = $dt->totalnilai;
+            }
+
+        }
+        var_dump($datatahap);
+        return $datatahap;
     }
 
 }

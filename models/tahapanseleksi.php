@@ -38,4 +38,7 @@ class TahapanSeleksi extends Model {
         }
         return $this->_db->Exec("select * from tahapanseleksi where juri = '$juri' and angkatan = $angkatan");
     }
+    public function getSemuaTahap($angkatan) {
+        return $this->_db->Exec("select distinct tahap from tahapanseleksi where angkatan = $angkatan");
+    }
 }

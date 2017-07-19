@@ -22,7 +22,7 @@
               <div class="pull-left">
                 <h2>Pendaftaran Anggota PASKIBRAKA</h2>
               </div>
-              <form action="/">
+              <form action="<?php echo SITE_ROOT;?>">
               <div class="pull-right">
                 <label><i class="glyphicon glyphicon-arrow-left"></i></label>
                 <input type="submit" class="button" value="Kembali" />

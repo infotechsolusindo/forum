@@ -30,11 +30,11 @@
         <div id="main" class="col-md-10 col-sm-10">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h2>Input Penilaian</h2>
+              <h2>Rekap Penilaian</h2>
             </div>
             <div class="panel-body">
               <div class="col-sm-12" style="overflow-x: scroll;">
-              <form action="?url=juri/index/penilaian&cmd=save" method="post">
+              <form action="?url=juri/index/rekap&cmd=save" method="post">
                 <input type="hidden" name="angkatan" value="<?php echo $data['angkatan']; ?>">
                 <input type="hidden" name="juri" value="<?php echo $data['juri']; ?>">
                 <input type="hidden" name="tahap" value="<?=isset($data['tahap']) ? $data['tahap'] : '';?>">
@@ -48,50 +48,30 @@
                     <td>: <?=$data['angkatan'];?></td>
                   </tr>
                 </table>
-                <table id="form-penilaian" class="table">
+                <table id="form-rekap" class="table">
                   <thead>
                     <tr>
-                      <?php if (isset($data['headerpenilaian'])) {foreach ($data['headerpenilaian'] as $header) {?>
-                      <th><?=$header;?></th>
-                      <?php }}?>
-                      <th></th>
+                      <th>No.Peserta</th>
+                      <th>Nama</th>
+                      <?php foreach ($data['datatahapan'] as $t) {?>
+                      <th>Tahap<?=$t->tahap;?></th>
+                      <?php }?>
+                      <th>Hasil</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <?php if (isset($data['datapenilaian'])) {foreach ($data['datapenilaian'] as $penilaian) {?>
+                  <?php foreach ($data['pesertas'] as $peserta) {?>
                     <tr>
-                    <?php foreach ($penilaian as $k => $p) {?>
-                      <?php if ($k == 'idwilayah') {continue;}?>
-                      <?php if ($k == 'nmwilayah') {?>
-                        <td style="white-space: nowrap;width: 50px"><?=$p;?></td>
-                      <?php } else if ($k == 'id') {?>
-                        <td style="white-space: nowrap;width: 10px"><?=$p;?></td>
-                      <?php } else if ($k == 'nama') {?>
-                        <td style=""><?=$p;?></td>
-                      <?php } else if (!($k == 'id') || !($k == 'nama')) {?>
-                        <td style="width: 80px;">
-                          <input type="text" style="width:100%"  autocomplete="off" maxlength="3" name="<?=$penilaian['id'] . '_' . $k;?>" value="<?php echo $p; ?>" <?=$penilaian['flag'] == 1 ? 'disabled' : '';?>>
-                        </td>
+                      <td><?=$peserta->nra;?></td>
+                      <td><?=$peserta->namalengkap;?></td>
+                      <?php foreach ($data['datatahapan'] as $t) {?>
+                      <td><?=$data['datarekap'][$peserta->nra][$t->tahap];?></td>
                       <?php }?>
-                    <?php }?>
-                      <td>
-                          <label for="cek-<?=$penilaian['id'];?>">
-                            <input type="checkbox" name="cek-<?=$penilaian['id'];?>" autocomplete="off" <?=$penilaian['flag'] == 1 ? 'checked="checked" disabled' : '';?>>
-                            Hitung
-                          </label>
-                        <?php if ($penilaian['flag'] == 1) {?>
-                          <input type="hidden" name="cek-<?=$penilaian['id'];?>" value="1">
-                        <?php }?>
-                      </td>
+                      <td></td>
                     </tr>
-                    <?php }}?>
+                  <?php }?>
                   </tbody>
                 </table>
-                <div>
-                  <center>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                  </center>
-                </div>
               </form>
               </div>
             </div>

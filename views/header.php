@@ -17,7 +17,7 @@
     <!-- Logo + Top Nav -->
     <div id="top">
       <h1><a href="#"><?php echo $data['brand']; ?></a></h1>
-      <?php //if (checkSession() || isset($_SESSION['id'])) {;?>
+      <?php //if (checkSession() || isset($_SESSION['id'])) {?>
       <div id="top-navigation">
         Welcome <a href="#"><strong><?php echo $data['user']; ?></strong></a>
         <span>|</span> <a href="#">Help</a>
@@ -57,11 +57,13 @@ default:
 ?>
     <div id="navigation">
       <ul>
-        <li><a href="/" <?php echo $beranda; ?>><span>Beranda</span></a></li>
-      <?php if (isset($data['wewenang']) && $data['wewenang'] > 0) {?>
+      <?php if (!isset($data['wewenang'])) {?>
+        <li><a href="<?php echo SITE_ROOT; ?>" <?php echo $beranda; ?>><span>Beranda</span></a></li>
+      <?php } else if (isset($data['wewenang']) && $data['wewenang'] == 1) {?>
         <li><a href="?url=admin/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
-      <?php }?>
-      <?php if (isset($data['wewenang']) && $data['wewenang'] == 's') {?>
+      <?php } else if (isset($data['wewenang']) && $data['wewenang'] == 2) {?>
+        <li><a href="?url=juri/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
+      <?php } else if (isset($data['wewenang']) && $data['wewenang'] == 's') {?>
         <li><a href="?url=seleksi/index" <?php echo $peserta; ?>><span>Peserta</span></a></li>
       <?php } else {?>
         <li><a href="?url=anggota/index" <?php echo $anggota; ?>><span>Anggota</span></a></li>

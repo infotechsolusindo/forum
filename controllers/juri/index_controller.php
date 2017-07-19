@@ -4,6 +4,7 @@
  */
 class Index_Controller extends Controller {
     private $angkatan;
+    private $juri;
     function __construct() {
         parent::__construct();
         $header = new View();
@@ -31,15 +32,21 @@ class Index_Controller extends Controller {
         $module_main = new Module( /*['artikel-terbaru']*/);
         $this->Assign('module_main', $module_main->Render());
         $this->angkatan = date('Y');
+        $this->juri = new AdminSeleksi;
+        $this->juri->getAdminProfile($_SESSION['id']);
+        if ($this->juri->getEmail() == '') {
+            $this->Load_View('error');
+            die;
+        }
     }
     public function index() {
         $this->Assign('angkatan', $this->angkatan);
         $wilayah = new Wilayah;
         $this->Assign('wilayah', $wilayah->getWilayah());
-        $juri = new AdminSeleksi;
-        $juri->getAdminProfile($_SESSION['id']);
-        $this->Assign('juri', $juri->getEmail());
-        $this->Assign('namajuri', $juri->getNamaLengkap());
+        // $juri = new AdminSeleksi;
+        // $juri->getAdminProfile($_SESSION['id']);
+        $this->Assign('juri', $this->juri->getEmail());
+        $this->Assign('namajuri', $this->juri->getNamaLengkap());
         // $this->penilaian();
         $this->Load_View('juri/index');
     }
@@ -52,13 +59,12 @@ class Index_Controller extends Controller {
     }
 
     public function penilaian() {
+        var_dump($_POST);
         $this->Assign('angkatan', $this->angkatan);
         $wilayah = new Wilayah;
         $this->Assign('wilayah', $wilayah->getWilayah());
-        $juri = new AdminSeleksi;
-        $juri->getAdminProfile($_SESSION['id']);
-        $this->Assign('juri', $juri->getEmail());
-        $this->Assign('namajuri', $juri->getNamaLengkap());
+        $this->Assign('juri', $this->juri->getEmail());
+        $this->Assign('namajuri', $this->juri->getNamaLengkap());
 
         if (isset($_GET['cmd']) && ($_GET['cmd'] == 'save')) {
             $this->penilaianSave();
@@ -66,9 +72,7 @@ class Index_Controller extends Controller {
         $angkatan = $this->angkatan;
         $tahapan = new TahapanSeleksi;
         $tahapan->setAngkatan($angkatan);
-        $juri = new AdminSeleksi;
-        $juri->getAdminProfile($_SESSION['id']);
-        $tahapan->setJuri($juri);
+        $tahapan->setJuri($this->juri);
         $items = $tahapan->getTahapan();
         $pesertas = new AnggotaFactory;
         $pesertas->setAngkatan($angkatan);
@@ -82,22 +86,27 @@ class Index_Controller extends Controller {
             array_push($header, $i->item);
         }
         $idtahap;
+        $flag = 0;
         foreach ($pesertas->getAnggotas() as $p) {
             if ($p->nra == '') {
                 continue;
             }
             $wilayah = new Wilayah;
             $w = $wilayah->getWilayah($p->wilayah)[0];
+            if (isset($_POST['cek-' . $p->nra])) {
+                $flag = 1;
+            }
             $data1 = [
                 'idwilayah' => $w->id,
                 'nmwilayah' => $w->nama,
                 'id' => $p->nra,
                 'nama' => $p->namalengkap,
+                'flag' => $flag,
             ];
             $data2 = [];
 
             $s = new Seleksi;
-            $seleksis = $s->getSemuaPenilaian($angkatan, $p->nra, $juri->getEmail());
+            $seleksis = $s->getSemuaPenilaian($angkatan, $p->nra, $this->juri->getEmail());
             foreach ($items as $i) {
                 $idtahap = $i->tahap;
                 logs($i->item);
@@ -110,6 +119,7 @@ class Index_Controller extends Controller {
                 }
 
             }
+
             $data = $data1 + $data2;
             $datapenilaian[] = $data;
         }
@@ -129,6 +139,7 @@ class Index_Controller extends Controller {
         $angkatan = 0;
         $tahap = '';
         $juri = '';
+        $cek = false;
         foreach ($_POST as $key => $val) {
             if ($key == 'angkatan') {
                 $angkatan = $val;
@@ -143,11 +154,50 @@ class Index_Controller extends Controller {
                 continue;
             }
             $arr = explode('_', $key);
-            $idpeserta = $arr[0];
-            $item = $arr[1];
-            // var_dump($idpeserta . ':' . $angkatan . ':' . $juri . ':' . $tahap . ':' . $item . ':' . $val);
-            $seleksi->updateNilai($idpeserta, $angkatan, $juri, $tahap, $item, $val);
+            if (substr($arr[0], 0, 3) == 'cek') {
+                logs('masuk ke blok flagging:' . $arr[0]);
+                $cek = true;
+                $carr = explode('-', $arr[0]);
+                $idpeserta = $carr[1] . '-' . $carr[2] . '-' . $carr[3];
+            } else {
+                $idpeserta = $arr[0];
+                $item = $arr[1];
+                // var_dump($idpeserta . ':' . $angkatan . ':' . $juri . ':' . $tahap . ':' . $item . ':' . $val);
+                $seleksi->updateNilai($idpeserta, $angkatan, $juri, $tahap, $item, $val);
+            }
+            if ($cek) {
+                //logs('Update Hasil:' . $idpeserta . ' ' . $angkatan . ' ' . $tahap);
+                $seleksi->updateHasil($idpeserta, $angkatan, $tahap);
+                $cek = false;
+            }
         }
         return;
+    }
+    public function rekap() {
+        $this->Assign('angkatan', $this->angkatan);
+        $wilayah = new Wilayah;
+        $this->Assign('wilayah', $wilayah->getWilayah());
+        $this->Assign('juri', $this->juri->getEmail());
+        $this->Assign('namajuri', $this->juri->getNamaLengkap());
+        $pesertas = new AnggotaFactory;
+        $pesertas->setAngkatan($this->angkatan);
+        $pesertas->setStatus('D');
+        $tahapanseleksi = new TahapanSeleksi;
+        $datatahapan = $tahapanseleksi->getSemuaTahap($this->angkatan);
+        foreach ($pesertas as $p) {
+            foreach ($datatahapan as $t) {
+                $data1[] = [
+                    'nopeserta' => $p->nra,
+                    'namapeserta' => $p->namalengkap,
+                ];
+            }
+        }
+        $seleksi = new Seleksi;
+        $datarekap = $seleksi->hasilPenilaian($this->angkatan, $datatahapan);
+        var_dump($datarekap);die;
+        $this->Assign('datatahapan', $datatahapan);
+        $this->Assign('datarekap', $datarekap);
+        $this->Assign('pesertas', $pesertas->getAnggotas());
+        $this->Load_View('juri/rekap');
     }
 }

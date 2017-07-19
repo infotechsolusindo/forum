@@ -13,3 +13,5 @@ create table penilaian(
 );
 
 alter table seleksi modify idpeserta varchar(10) null;
+
+alter table penilaian modify totalnilai float(3,2);
