@@ -106,6 +106,7 @@ class Login_Controller extends Controller {
             $_SESSION['email'] = $user->getEmail();
             $_SESSION['privileges'] = 'juri';
             logs('sebagai juri');
+            break;
         default:
             session_destroy();
             redirect(SITE_ROOT, 'auth/logout');
