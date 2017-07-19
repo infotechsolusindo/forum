@@ -1,5 +1,6 @@
 <?php
 require ROOT . '/vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
+require ROOT . '/vendor/phpmailer/phpmailer/class.smtp.php';
 class Email extends PHPMailer {
     private $_service;
     public $ErrorInfo;
@@ -44,6 +45,7 @@ class Email extends PHPMailer {
             $service->addClient($sclient);
             return;
         } else {
+            logs('Sending direct email...');
             return $this->mail->Send();
         }
     }
