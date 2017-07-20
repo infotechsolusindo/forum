@@ -1,10 +1,10 @@
 <?php
-include ROOT . '/config/config.php';
-include ROOT . '/library/controller.php';
-include ROOT . '/library/database.php';
-include ROOT . '/library/email.php';
-include ROOT . '/library/model.php';
-include ROOT . '/library/mysql.php';
-include ROOT . '/library/service.php';
-include ROOT . '/library/serviceclient.php';
-include ROOT . '/library/serviceworker.php';
+include ROOT . DS . 'config' . DS . 'config.php';
+include ROOT . DS . 'library' . DS . 'controller.php';
+include ROOT . DS . 'library' . DS . 'database.php';
+include ROOT . DS . 'library' . DS . 'email.php';
+include ROOT . DS . 'library' . DS . 'model.php';
+include ROOT . DS . 'library' . DS . 'mysql.php';
+include ROOT . DS . 'library' . DS . 'service.php';
+include ROOT . DS . 'library' . DS . 'serviceclient.php';
+include ROOT . DS . 'library' . DS . 'serviceworker.php';

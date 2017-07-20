@@ -1,6 +1,6 @@
 <?php
 define('DS', '/');
-define('ROOT', '/www/forum.localhost/');
+define('ROOT', DS . 'www' . DS . 'forum.localhost' . DS);
 function logs($msg) {
     date_default_timezone_set(TIME_ZONE);
     $date = date('d/m/Y h:i:s a', time());
