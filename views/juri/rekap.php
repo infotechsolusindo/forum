@@ -65,7 +65,11 @@
                       <td><?=$peserta->nra;?></td>
                       <td><?=$peserta->namalengkap;?></td>
                       <?php foreach ($data['datatahapan'] as $t) {?>
+                      <?php if (isset($data['datarekap'][$peserta->nra][$t->tahap])) {?>
                       <td><?=$data['datarekap'][$peserta->nra][$t->tahap];?></td>
+                      <?php } else {?>
+                      <td></td>
+                      <?php }?>
                       <?php }?>
                       <td></td>
                     </tr>

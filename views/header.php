@@ -17,7 +17,7 @@
     <!-- Logo + Top Nav -->
     <div id="top">
       <h1><a href="#"><?php echo $data['brand']; ?></a></h1>
-      <?php //if (checkSession() || isset($_SESSION['id'])) {?>
+      <?php if (checkSession() || isset($_SESSION['id'])) {?>
       <div id="top-navigation">
         Welcome <a href="#"><strong><?php echo $data['user']; ?></strong></a>
         <span>|</span> <a href="#">Help</a>
@@ -25,7 +25,7 @@
         <span>|</span>
         <a href="?url=auth/logout">Log out</a>
       </div>
-      <?php //};?>
+      <?php }?>
     </div>
     <!-- End Logo + Top Nav -->
     <!-- Main Nav -->

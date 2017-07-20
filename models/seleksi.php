@@ -173,8 +173,6 @@ class Seleksi extends Model {
             }
 
         }
-        var_dump($datatahap);
         return $datatahap;
     }
-
 }

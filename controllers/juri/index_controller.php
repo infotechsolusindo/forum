@@ -59,7 +59,6 @@ class Index_Controller extends Controller {
     }
 
     public function penilaian() {
-        var_dump($_POST);
         $this->Assign('angkatan', $this->angkatan);
         $wilayah = new Wilayah;
         $this->Assign('wilayah', $wilayah->getWilayah());
@@ -194,7 +193,6 @@ class Index_Controller extends Controller {
         }
         $seleksi = new Seleksi;
         $datarekap = $seleksi->hasilPenilaian($this->angkatan, $datatahapan);
-        var_dump($datarekap);die;
         $this->Assign('datatahapan', $datatahapan);
         $this->Assign('datarekap', $datarekap);
         $this->Assign('pesertas', $pesertas->getAnggotas());
