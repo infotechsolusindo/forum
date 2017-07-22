@@ -36,6 +36,7 @@ class Email extends PHPMailer {
 
     public function sendemail() {
         if (MAIL_SERVICE) {
+            logs('Set service for email');
             $sclient = new ServiceClient('email');
             $sclient->addData($this->From, 'from');
             $sclient->addData($this->to, 'to');
@@ -44,13 +45,18 @@ class Email extends PHPMailer {
             $service = new Service;
             $service->addClient($sclient);
             return;
-        } else {
-            logs('Sending direct email...');
-            return $this->mail->Send();
         }
+        return $this->execute();
     }
     public function execute() {
-        return $this->mail->Send();
+        foreach ($this->to[0] as $value) {
+            if ($value == '') {
+                continue;
+            }
+            logs('Sending email to: ' . $value);
+        }
+        $this->mail->Send();
+        logs('Done');
     }
 
     public function to($address, $address_name = '') {

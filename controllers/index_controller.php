@@ -62,7 +62,6 @@ class Index_Controller extends Controller {
 
     public function pendaftaran1() {
         $akun = new Akun;
-        $this->Load_View('pendaftaran1');
         if (isset($_GET['cmd']) == 'save') {
             $akun->setEmail($_POST['email']);
             $akun->setPassword($_POST['password']);
@@ -104,6 +103,7 @@ class Index_Controller extends Controller {
         }
         $this->Assign('errorMessage', $this->errors);
         $this->Assign('akun', $akun);
+        $this->Load_View('pendaftaran1');
     }
 
     public function pendaftaran2($email) {
