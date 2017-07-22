@@ -43,6 +43,9 @@
               <div class="col-sm-9">
                 <table class="table">
                   <tr>
+                    <td>NRA</td><td>: <?php echo $data['peserta']->getnra(); ?></td>
+                  </tr>
+                  <tr>
                     <td>Email</td><td>: <?php echo $data['peserta']->getEmail(); ?></td>
                   </tr>
                   <tr>

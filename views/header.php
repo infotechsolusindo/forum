@@ -59,13 +59,17 @@ default:
       <ul>
       <?php if (!isset($data['wewenang'])) {?>
         <li><a href="<?php echo SITE_ROOT; ?>" <?php echo $beranda; ?>><span>Beranda</span></a></li>
-      <?php } else if (isset($data['wewenang']) && $data['wewenang'] == 1) {?>
+      <?php }?>
+      <?php if (isset($data['wewenang']) && $data['wewenang'] == 1) {?>
         <li><a href="?url=admin/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
-      <?php } else if (isset($data['wewenang']) && $data['wewenang'] == 2) {?>
+      <?php }?>
+      <?php if (isset($data['wewenang']) && $data['wewenang'] == 2) {?>
         <li><a href="?url=juri/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
-      <?php } else if (isset($data['wewenang']) && $data['wewenang'] == 's') {?>
+      <?php }?>
+      <?php if (isset($data['wewenang']) && $data['wewenang'] == 's') {?>
         <li><a href="?url=seleksi/index" <?php echo $peserta; ?>><span>Peserta</span></a></li>
-      <?php } else {?>
+      <?php }?>
+      <?php if (isset($data['wewenang']) && $data['wewenang'] >= 0 && !($data['wewenang'] == 's' || $data['wewenang'] == 'x')) {?>
         <li><a href="?url=anggota/index" <?php echo $anggota; ?>><span>Anggota</span></a></li>
         <li><a href="?url=anggota/forum" <?php echo $forum; ?>><span>Forum</span></a></li>
         <li><a href="?url=anggota/karir" <?php echo $karir; ?>><span>Karir</span></a></li>

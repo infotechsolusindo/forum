@@ -13,3 +13,4 @@ public/tmp/*
 !public/data/formulir/.gitfile
 !public/data/foto/.gitfile
 !public/tmp/.gitfile
+testing/*

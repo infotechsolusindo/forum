@@ -7,6 +7,11 @@ class Index_Controller extends Controller {
     private $juri;
     function __construct() {
         parent::__construct();
+        if (!checkSession()) {
+            logs('Session tidak ditemukan');
+            session_destroy();
+            redirect(SITE_ROOT, 'index');
+        }
         $header = new View();
         $header->Assign('wewenang', (isset($_SESSION['wewenang']) ? $_SESSION['wewenang'] : ''));
         $header->Assign('app_title', APP_TITLE);

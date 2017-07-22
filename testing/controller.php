@@ -69,7 +69,7 @@ $myforum->tambah($mythread);
 // var_dump($myforum);
 */
 
-$email = 'A.Septela@Yahoo.Com';
+//$email = 'A.Septela@Yahoo.Com';
 
 /*
 $user = new Akun;
@@ -79,7 +79,9 @@ $user->simpanAkun();
 $user->setWewenang('0');
 $user->update();
  */
-$user = new Anggota;
-$user->getProfile($email);
-var_dump($user);
+//$user = new Anggota;
+//$user->getProfile($email);
+//var_dump($user);
+$akun = new Akun;
+$akun->generateAkun();
 
