@@ -23,13 +23,13 @@ class Index_Controller extends Controller {
 
         $module_sidebanner = new Module($side_banner);
         $this->Assign('side_banner', $module_sidebanner->Render());
-        $module_left = new Module( /*['karir-side','links-side']*/);
+        $module_left = new Module(['karir-side', 'links-side']);
         $this->Assign('module_left', $module_left->Render());
-        $module_right = new Module( /*['populer','forum-side']*/);
+        $module_right = new Module(['populer', 'forum-side']);
         $this->Assign('module_right', $module_right->Render());
-        $module_banner = new Module( /*['banner']*/);
+        $module_banner = new Module(['banner']);
         $this->Assign('module_banner', $module_banner->Render());
-        $module_main = new Module( /*['artikel-terbaru']*/);
+        $module_main = new Module(['artikel-terbaru']);
         $this->Assign('module_main', $module_main->Render());
     }
 
@@ -83,6 +83,7 @@ class Index_Controller extends Controller {
                 if (!is_object($result)) {
                     // Send Email
                     $link = SITE_ROOT . DS . "?url=index/link/" . $akun->getSecret() . "&email=" . $akun->getEmail();
+                    logs($link);
                     $v = new View;
                     $v->Assign('link', $link);
                     $body = $v->Render('email/pendaftaran1', FALSE);
@@ -112,6 +113,10 @@ class Index_Controller extends Controller {
         }
         $this->Load_View('pendaftaran2');
         session_destroy();
+    }
+
+    public function pendaftaranMember1() {
+        $this->Load_View('index/pendaftaranMember');
     }
 
 }

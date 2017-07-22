@@ -64,6 +64,7 @@ class Index_Controller extends Controller {
     }
 
     public function penilaian() {
+        $datapenilaian = [];
         $this->Assign('angkatan', $this->angkatan);
         $wilayah = new Wilayah;
         $this->Assign('wilayah', $wilayah->getWilayah());

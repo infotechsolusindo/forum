@@ -108,21 +108,21 @@
                       <option value="S3" <?=$data['pendidikanterakhirselect'] == 'S3' ? 'selected' : '';?>>Strata 3</option>
                     </select>
                   </p>
-                  <p>
+<!--                   <p>
                     <span class="req"></span>
                     <label>Pekerjaan</label>
-                    <input type="text" name="pekerjaan" class="field size1" value="<?php echo $data['peserta']->getPekerjaan(); ?>" />
-                  </p>
+                    <input type="text" name="pekerjaan" class="field size1" value="<?php //echo $data['peserta']->getPekerjaan(); ;;?>" />
+                  </p> -->
                   <p>
                     <span class="req"></span>
-                    <label>Institusi</label>
+                    <label>Asal Sekolah</label>
                     <input type="text" name="institusi" class="field size1" value="<?php echo $data['peserta']->getInstitusi(); ?>" />
                   </p>
-                  <p>
+<!--                   <p>
                     <span class="req"></span>
                     <label>Jabatan</label>
-                    <input type="text" name="jabatan" class="field size1" value="<?php echo $data['peserta']->getJabatan(); ?>" />
-                  </p>
+                    <input type="text" name="jabatan" class="field size1" value="<?php //echo $data['peserta']->getJabatan(); ;?>" />
+                  </p> -->
                   <p>
                     <label>Foto </label>
                     <img src="<?php echo $data['peserta']->getFoto(); ?>" height="100px"/>

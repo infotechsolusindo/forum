@@ -67,7 +67,6 @@ class Index_Controller extends Controller {
     public function peserta($id) {
         $module_main = new Module();
         $this->Assign('module_main', $module_main->Render());
-
         $peserta = new Peserta;
         $peserta->getProfile($id, 'D', 's');
         $this->Assign('namalengkap', $peserta->getnamalengkap());
@@ -75,6 +74,41 @@ class Index_Controller extends Controller {
         $this->Assign('email', $peserta->getemail());
         $this->Assign('tgllahir', $peserta->gettgllahir());
         $this->Assign('foto', $peserta->getfoto());
+        $this->Assign('nra', $peserta->getnra());
+        $this->Assign('angkatan', $peserta->getangkatan());
+        switch ($peserta->getJenisKelamin()) {
+        case 'L':
+            $jk = 'Laki - laki';
+            break;
+        case 'P':
+            $jk = 'Perempuan';
+            break;
+        }
+        $this->Assign('jeniskelamin', $jk);
+        $this->Assign('tempatlahir', $peserta->gettempatlahir());
+        $this->Assign('nomerponsel', $peserta->getnomerponsel());
+        $wilayah = new Wilayah;
+        $w = $wilayah->getwilayah($peserta->getwilayah());
+        $this->Assign('wilayah', $w[0]->nama);
+        $this->Assign('pendidikanterakhir', $peserta->getpendidikanterakhir());
+        $this->Assign('pekerjaan', $peserta->getpekerjaan());
+        $this->Assign('institusi', $peserta->getinstitusi());
+        $this->Assign('jabatan', $peserta->getjabatan());
+        switch ($peserta->getstatus()) {
+        case 'A':
+            $status = 'Aktif';
+            break;
+        case 'B':
+            $status = 'Di Block';
+            break;
+        case 'C':
+            $status = 'Batal / di Hapus';
+            break;
+        case 'D':
+            $status = 'Belum Aktif';
+            break;
+        }
+        $this->Assign('status', $status);
 
         $dokumens = new Dokumen;
         $d = $dokumens->getDokumens($peserta->getEmail());

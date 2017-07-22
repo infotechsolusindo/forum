@@ -40,11 +40,21 @@
             </div>
             <div class="panel panel-body">
               <table class="table">
+                <tr><td>ID.Peserta</td><td>: <?php echo $data['nra']; ?></td></tr>
                 <tr><td>Nama Lengkap</td><td>: <?php echo $data['namalengkap']; ?></td></tr>
+                <tr><td>Jenis Kelamin</td><td>: <?php echo $data['jeniskelamin']; ?></td></tr>
                 <tr><td>Email</td><td>: <?php echo $data['email']; ?></td></tr>
                 <tr><td>Alamat Domisili</td><td>: <?php echo $data['alamatdomisili']; ?></td></tr>
+                <tr><td>Tempat Lahir</td><td>: <?php echo $data['tempatlahir']; ?></td></tr>
                 <tr><td>Tgl Lahir</td><td>: <?php echo $data['tgllahir']; ?></td></tr>
+                <tr><td>Nomer Ponsel</td><td>: <?php echo $data['nomerponsel']; ?></td></tr>
+                <tr><td>Wilayah</td><td>: <?php echo $data['wilayah']; ?></td></tr>
+                <tr><td>Pendidikan Terakhir</td><td>: <?php echo $data['pendidikanterakhir']; ?></td></tr>
+<!--                 <tr><td>Pekerjaan</td><td>: <?php echo $data['pekerjaan']; ?></td></tr> -->
+                <tr><td>Asal Sekolah</td><td>: <?php echo $data['institusi']; ?></td></tr>
+<!--                 <tr><td>Jabatan</td><td>: <?php echo $data['jabatan']; ?></td></tr> -->
                 <tr><td>Foto</td><td>: <img src="<?php echo $data['foto']; ?>" height="200" width="200"></td></tr>
+                <tr><td>Status</td><td>: <?php echo $data['status']; ?></td></tr>
                 </tr>
               </table>
               <center>

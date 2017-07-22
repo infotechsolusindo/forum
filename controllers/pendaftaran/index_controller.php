@@ -98,9 +98,9 @@ class Index_Controller extends Controller {
             $peserta->setAlamatDomisili($_POST['alamatdomisili']);
             $peserta->setWilayah($_POST['wilayah']);
             $peserta->setPendidikanTerakhir($_POST['pendidikanterakhir']);
-            $peserta->setPekerjaan($_POST['pekerjaan']);
+            // $peserta->setPekerjaan($_POST['pekerjaan']);
             $peserta->setInstitusi($_POST['institusi']);
-            $peserta->setJabatan($_POST['jabatan']);
+            // $peserta->setJabatan($_POST['jabatan']);
             $peserta->setFoto($fotofile);
             if (empty($this->errors)) {
                 logs('Tidak ada error, proses request');

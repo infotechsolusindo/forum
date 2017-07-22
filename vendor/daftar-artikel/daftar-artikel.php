@@ -1,21 +1,20 @@
 <?php
 /**
-* 
-*/
-class DaftarArtikel
-{
-	private $artikel;
+ *
+ */
+class DaftarArtikel {
+    public $artikels;
+    private $penulis;
 
-	function __construct()
-	{
-		$this->artikel = new Artikel();
-		$this->artikel->setAuthor($_SESSION['id']);
-		$this->index();
-	}
+    function __construct() {
+        $this->penulis = $_SESSION['id'];
+        $this->artikels = new ArtikelFactory;
+        $this->artikels = $this->artikels->ambilSemuaArtikel($this->penulis);
+        $this->index();
+    }
 
-	public function index()
-	{
-		$this->daftar = $this->artikel->daftarArtikel();
-	}
+    public function index() {
+
+    }
 
 }

@@ -1,5 +1,5 @@
 <?php
-class Forum_Controller extends Controller {
+class Kegiatan_Controller extends Controller {
     private $errors = [];
     private $success;
 
@@ -34,17 +34,12 @@ class Forum_Controller extends Controller {
         $this->Assign('module_right', $module_right->Render());
         $module_banner = new Module( /*['banner']*/);
         $this->Assign('module_banner', $module_banner->Render());
-        $module_main = new Module(['daftar-artikel']);
+        $module_main = new Module( /*['artikel-terbaru']*/);
         $this->Assign('module_main', $module_main->Render());
     }
 
     public function index() {
-        $this->Load_View('forum/index');
-    }
-    public function detail($id) {
-        $artikel = new Artikel($id);
-        $artikel->getJudul();
-        var_dump($artikel);die;
+        $this->Load_View('kegiatan/index');
     }
 
 }

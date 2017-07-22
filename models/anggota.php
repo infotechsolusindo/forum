@@ -148,6 +148,7 @@ class Anggota extends Akun {
     public function getFoto() {
         return $this->foto;
     }
+    // --------------------------------------------------------------------------------
     public function simpanAnggota() {
         $name = basename($this->foto);
         if ($name != '') {
@@ -199,29 +200,29 @@ class Anggota extends Akun {
         ];
         return $this->_db->create($data, 'update');
     }
-    public function set($nra) {
-        $this->_db->setTable('anggota');
-        $anggota = $this->_db->Exec("select * from akun,anggota where akun.email = anggota.email and anggota.nra = '$nra[id]'");
-        $anggota = $anggota[0];
-        $this->setEmail($anggota->email);
-        $this->setPassword($anggota->password);
-        $this->setNRA($anggota->nra); //*
-        $this->setNamaPanggilan($anggota->namapanggilan); //*
-        $this->setNamaLengkap($anggota->namalengkap);
-        $this->setAngkatan($anggota->angkatan); //*
-        $this->setJenisKelamin($anggota->jeniskelamin); //*
-        $this->setTempatLahir($anggota->tempatlahir); //*
-        $this->setTglLahir($anggota->tgllahir); //*
-        $this->setNomerPonsel($anggota->nomerponsel);
-        $this->setAlamatDomisili($anggota->alamatdomisili);
-        $this->setWilayah($anggota->wilayah);
-        $this->setPendidikanTerakhir($anggota->pendidikanterakhir); //*
-        $this->setPekerjaan($anggota->pekerjaan);
-        $this->setInstitusi($anggota->institusi);
-        $this->setJabatan($anggota->jabatan);
-        $this->setFotoVar($anggota->foto);
-        $this->setStatus($anggota->status); //*
-    }
+    // public function set($nra) {
+    //     $this->_db->setTable('anggota');
+    //     $anggota = $this->_db->Exec("select * from akun,anggota where akun.email = anggota.email and anggota.nra = '$nra[id]'");
+    //     $anggota = $anggota[0];
+    //     $this->setEmail($anggota->email);
+    //     $this->setPassword($anggota->password);
+    //     $this->setNRA($anggota->nra); //*
+    //     $this->setNamaPanggilan($anggota->namapanggilan); //*
+    //     $this->setNamaLengkap($anggota->namalengkap);
+    //     $this->setAngkatan($anggota->angkatan); //*
+    //     $this->setJenisKelamin($anggota->jeniskelamin); //*
+    //     $this->setTempatLahir($anggota->tempatlahir); //*
+    //     $this->setTglLahir($anggota->tgllahir); //*
+    //     $this->setNomerPonsel($anggota->nomerponsel);
+    //     $this->setAlamatDomisili($anggota->alamatdomisili);
+    //     $this->setWilayah($anggota->wilayah);
+    //     $this->setPendidikanTerakhir($anggota->pendidikanterakhir); //*
+    //     $this->setPekerjaan($anggota->pekerjaan);
+    //     $this->setInstitusi($anggota->institusi);
+    //     $this->setJabatan($anggota->jabatan);
+    //     $this->setFotoVar($anggota->foto);
+    //     $this->setStatus($anggota->status); //*
+    // }
     public function getProfile($email, $status = 'A', $wewenang = null) {
         $sql = "select * from akun inner join anggota on anggota.email = akun.email where anggota.email = '$email' and status = '$status'";
         if ($wewenang) {

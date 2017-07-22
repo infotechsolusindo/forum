@@ -8,7 +8,9 @@
 
 <link rel="stylesheet" href="public/assets/css/style.css" type="text/css" media="all" />
 <link rel="stylesheet" href="public/assets/css/jquery-ui.1.12.1.css" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="public/assets/css/datatables.min.css"/>
 <script src="public/assets/js/jquery.js"></script>
+<script type="text/javascript" src="public/assets/js/datatables.min.js"></script>
 </head>
 <body>
 <!-- Header -->
@@ -61,10 +63,10 @@ default:
         <li><a href="<?php echo SITE_ROOT; ?>" <?php echo $beranda; ?>><span>Beranda</span></a></li>
       <?php }?>
       <?php if (isset($data['wewenang']) && $data['wewenang'] == 1) {?>
-        <li><a href="?url=admin/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
+        <li><a href="?url=admin/index" <?php echo $admin; ?>><span>Admin</span></a></li>
       <?php }?>
       <?php if (isset($data['wewenang']) && $data['wewenang'] == 2) {?>
-        <li><a href="?url=juri/index" <?php echo $admin; ?>><span><?php echo ucfirst($data['tabmenu']); ?></span></a></li>
+        <li><a href="?url=juri/index" <?php echo $admin; ?>><span>Juri</span></a></li>
       <?php }?>
       <?php if (isset($data['wewenang']) && $data['wewenang'] == 's') {?>
         <li><a href="?url=seleksi/index" <?php echo $peserta; ?>><span>Peserta</span></a></li>
