@@ -119,4 +119,43 @@ class Index_Controller extends Controller {
         $this->Load_View('index/pendaftaranMember');
     }
 
+
+
+   public function runservice(){
+/**
+ * Worker for email service
+ *   sebagai contoh untuk membuat service
+ */
+$action = function ($data) {
+    $arrdata = (Object) json_decode($data);
+    $email = new Email;
+    foreach ($arrdata->to[0] as $to) {
+        if ($to == '') {
+            continue;
+        }
+        $email->to($to);
+    }
+    $email->subject($arrdata->subject);
+    $email->body(base64_decode($arrdata->body));
+    $email->execute();
+};
+$emailworker = new ServiceWorker('email');
+$emailworker->addAction($action);
+
+/**
+ * Add all workers
+ */
+$workers[] = $emailworker;
+	$service = new Service;
+	foreach ($workers as $worker) {
+	    $service->addWorker($worker);
+	}
+
+	//for (;;) {
+	    $service->start();
+	    sleep(1);
+	//}
+
+    }
+
 }

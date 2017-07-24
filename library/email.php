@@ -15,7 +15,7 @@ class Email extends PHPMailer {
         $this->mail->IsSMTP(); // telling the class to use SMTP
         //$mail->Host       = "mail.yourdomain.com"; // SMTP server
 
-        $this->mail->SMTPDebug = 0; // enables SMTP debug information (for testing)
+        $this->mail->SMTPDebug = 2; // enables SMTP debug information (for testing)
         // 1 = errors and messages
         // 2 = messages only
         $this->mail->SMTPAuth = true; // enable SMTP authentication
@@ -26,6 +26,7 @@ class Email extends PHPMailer {
         $this->mail->Password = MAIL_PASSWORD; // password
 
         $this->mail->SetFrom(MAIL_FROM, MAIL_FROM_DESC);
+	$this->mail->IsHTML(true);
         // if(!$this->mail->Send()) {
         //     echo "Mailer Error: " . $this->mail->ErrorInfo;
         // } else {

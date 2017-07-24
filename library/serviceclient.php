@@ -3,6 +3,7 @@ class ServiceClient {
     private $data = [];
     protected $procname;
     function __construct($procname) {
+	logs('masuk service client');
         $this->procname = $procname;
     }
     public function addData($data, $name = null) {

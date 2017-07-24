@@ -41,24 +41,24 @@ function UnregisterGlobals() {
 }
 
 //Automatically includes files containing classes that are called
-function __autoload($className) {
+function myautoload($className) {
     global $path;
 //fetch file
-    // logs('Open '.$className.' class');
+    logs('Open '.$className.' class');
     if (file_exists(ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php')) {
         require_once ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php';
-        return;
-        // logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
-        //     .ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php');
+         logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
+             .ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php');
+	return;
     } else if (file_exists(ROOT . DS . 'models' . DS . strtolower($className) . '.php')) {
         require_once ROOT . DS . 'models' . DS . strtolower($className) . '.php';
-        return;
-        // logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
-        //     .ROOT.DS.'models'.DS.strtolower($className).'.php');
+         logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
+             .ROOT.DS.'models'.DS.strtolower($className).'.php');
+	return;
     } else if (file_exists(ROOT . DS . 'library' . DS . strtolower($className) . '.php')) {
         require_once ROOT . DS . 'library' . DS . strtolower($className) . '.php';
-        return;
-        //logs('Get all Library Class');
+        logs('Get all Library Class');
+	return;
     } else {
         $classfound = false;
         $it = new RecursiveDirectoryIterator(ROOT . DS . 'vendor');
@@ -95,7 +95,7 @@ function __autoload($className) {
     }
     logs('End Load=================================================');
 }
-
+spl_autoload_register('myautoload');
 /** Main Call Function **/
 function CallHook() {
     global $url, $path;
@@ -152,7 +152,7 @@ function redirect($url, $action = null, $message = null) {
     $protocol = $address[0] == 'https' ? 'https' : 'http';
     $action = isset($action) || $action === '' ? '/?url=' . $action : '';
     $_SESSION['message'] = $message;
-    echo 'Location: ' . $protocol . '://' . $address[1] . $action;
+    //echo 'Location: ' . $protocol . '://' . $address[1] . $action;
     logs('Location: ' . $protocol . '://' . $address[1] . $action);
     return header('Location: ' . $protocol . '://' . $address[1] . $action, true, 302);
 }

@@ -1,7 +1,7 @@
 <?php
 class Thread extends Artikel implements IArtikel 
 {
-	private $topik;
+	protected $topik;
 	function __construct(){
 		parent::__construct();
 	}
