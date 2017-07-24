@@ -122,39 +122,48 @@ class Index_Controller extends Controller {
 
 
    public function runservice(){
-/**
- * Worker for email service
- *   sebagai contoh untuk membuat service
- */
-$action = function ($data) {
-    $arrdata = (Object) json_decode($data);
-    $email = new Email;
-    foreach ($arrdata->to[0] as $to) {
-        if ($to == '') {
-            continue;
-        }
-        $email->to($to);
-    }
-    $email->subject($arrdata->subject);
-    $email->body(base64_decode($arrdata->body));
-    $email->execute();
-};
-$emailworker = new ServiceWorker('email');
-$emailworker->addAction($action);
+        /**
+         * Worker for email service
+         *   sebagai contoh untuk membuat service
+         */
+        $action = function ($data) {
+            $arrdata = (Object) json_decode($data);
+            $email = new Email;
+            foreach ($arrdata->to[0] as $to) {
+                if ($to == '') {
+                    continue;
+                }
+                $email->to($to);
+            }
+            $email->subject($arrdata->subject);
+            $email->body(base64_decode($arrdata->body));
+            $email->execute();
+        };
+        $emailworker = new ServiceWorker('email');
+        $emailworker->addAction($action);
 
-/**
- * Add all workers
- */
-$workers[] = $emailworker;
+        /**
+         * Add all workers
+         */
+        $workers[] = $emailworker;
 	$service = new Service;
 	foreach ($workers as $worker) {
 	    $service->addWorker($worker);
 	}
 
-	//for (;;) {
-	    $service->start();
+	for ($i=0;$i<=60;$i++) {
+            $starttime = time();
+            $service->start();
+            $endtime = time();
+            if(($endtime-$starttime)>5){
+                logs('Start at: '.$starttime);
+                logs('Stop  at: '.$endtime);
+            }
+            if(($endtime-$starttime)>60){
+                break;
+            }
 	    sleep(1);
-	//}
+	}
 
     }
 

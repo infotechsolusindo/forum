@@ -30,6 +30,7 @@ class Service extends Model {
             $run($result[0]->data);
             logs('Finish :[ID=' . $result[0]->id . '],[ProcName:' . $result[0]->procname) . ']';
         }
+        return;
     }
 }
 
