@@ -44,21 +44,21 @@ function UnregisterGlobals() {
 function myautoload($className) {
     global $path;
 //fetch file
-    logs('Open '.$className.' class');
+    //logs('Open ' . $className . ' class');
     if (file_exists(ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php')) {
         require_once ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php';
-         logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
-             .ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php');
-	return;
+        //logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
+        //    .ROOT . DS . 'controllers' . DS . $path . strtolower($className) . '.php');
+        return;
     } else if (file_exists(ROOT . DS . 'models' . DS . strtolower($className) . '.php')) {
         require_once ROOT . DS . 'models' . DS . strtolower($className) . '.php';
-         logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
-             .ROOT.DS.'models'.DS.strtolower($className).'.php');
-	return;
+        //logs('Register Class: '.strtolower($className).' in file :'.PHP_EOL
+        //    .ROOT.DS.'models'.DS.strtolower($className).'.php');
+        return;
     } else if (file_exists(ROOT . DS . 'library' . DS . strtolower($className) . '.php')) {
         require_once ROOT . DS . 'library' . DS . strtolower($className) . '.php';
-        logs('Get all Library Class');
-	return;
+        //logs('Get all Library Class');
+        return;
     } else {
         $classfound = false;
         $it = new RecursiveDirectoryIterator(ROOT . DS . 'vendor');
