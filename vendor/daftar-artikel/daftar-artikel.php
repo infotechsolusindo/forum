@@ -9,7 +9,8 @@ class DaftarArtikel {
     function __construct() {
         $this->penulis = $_SESSION['id'];
         $this->artikels = new ArtikelFactory;
-        $this->artikels = $this->artikels->ambilSemuaArtikel($this->penulis);
+        // $this->artikels = $this->artikels->ambilSemuaArtikel($this->penulis);
+        $this->artikels = $this->artikels->getArtikelsThread();
         $this->index();
     }
 

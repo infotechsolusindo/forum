@@ -39,6 +39,8 @@ class Forum_Controller extends Controller {
     }
 
     public function index() {
+        $thread = new ArtikelFactory;
+        $this->Assign('list', $thread->getArtikelsThread());
         $this->Load_View('forum/index');
     }
     public function detail($id) {
@@ -46,5 +48,63 @@ class Forum_Controller extends Controller {
         $artikel->getJudul();
         var_dump($artikel);die;
     }
+    public function tambah() {
+        $this->Load_View('forum/thread_form');
+    }
+    public function simpan() {
+        $tipe = $_POST['tipe'];
+        switch ($tipe) {
+        case '1':
+            $this->simpanThread();
+            break;
+        case '2':
+            $this->simpanKarir();
+            break;
+        case '3':
+            $this->simpanKegiatan();
+            break;
+        default:
+            redirect(SITE_ROOT . '?url=anggota/forum');
+            break;
+        }
+        return;
+    }
+    private function simpanThread() {
+        $judul = $_POST['judul'];
+        $isipanjang = $_POST['isi'];
+        $isipendek = strlen($isipanjang) > 0 ? substr($isipanjang, 0, 255) : '';
+        $penulis = $_SESSION['id'];
+        $topik = '';
+        $filename = '';
+        $thread = new Thread;
+        if (strlen($_POST['topikbaru']) > 0) {
+            $topik = $thread->newtopik($_POST['topikbaru']);
+        } else {
+            if ($_POST['idtopik'] == "") {
+                $error = "Topik belum dipilih";
+            } else {
+                $topik = $_POST['idtopik'];
+            }
+        }
+        if ($_FILES['gambar']['name'] != '' || $_FILES['gambar']['size'] > 0 && $_FILES['gambar']['size'] < 2000000) {
+            $filename = $thread->uploadFile($_FILES['gambar']);
+        }
+        $data = [
+            'tglposting' => date('Y-m-d'),
+            'judul' => $judul,
+            'isipendek' => $isipendek,
+            'isipanjang' => $isipanjang,
+            'penulis_email' => $penulis,
+            'idtopik' => $topik,
+            'status' => '0',
+            'tipe' => '1',
+            'gambar' => $filename,
+        ];
+        if ($error !== '') {redirect(SITE_ROOT . '?url=anggota/forum/tambah');}
+        $thread->simpan($data);
+        redirect(SITE_ROOT . '?url=anggota/forum');
+    }
+    private function simpanKarir() {}
+    private function simpanKegiatan() {}
 
 }

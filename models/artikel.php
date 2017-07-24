@@ -65,4 +65,8 @@ class Artikel extends Model {
     private function getSemuaKomen($kodeartikel) {
         /* Load semua komentar untuk artikel ini */
     }
+    protected function simpan($data) {
+        $this->_db->setTable('artikel');
+        $this->_db->create($data);
+    }
 }
