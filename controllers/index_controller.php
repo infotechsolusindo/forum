@@ -115,8 +115,51 @@ class Index_Controller extends Controller {
         session_destroy();
     }
 
-    public function pendaftaranMember1() {
-        $this->Load_View('index/pendaftaranMember');
+    public function pendaftaranmember1() {
+        $akun = new Akun;
+        if (isset($_GET['cmd']) == 'save') {
+            $akun->setEmail($_POST['email']);
+            $akun->setPassword($_POST['password']);
+            // Validation
+            //Cek email kosong atau kurang dari 6 karakter
+            if (isset($_POST['email']) && ($_POST['email'] === '' || strlen($_POST['email']) < 6)) {
+                $this->errors['email'] = 'Email tidak boleh kosong !';
+            }
+            //Cek password kosong
+            if (isset($_POST['password']) && ($_POST['password'] == '')) {
+                $this->errors['password'] = 'Password tidak boleh kosong !';
+            }
+            //Cek konfirmasi password
+            if (!$akun->verifyPassword($_POST['konfirmasi'])) {
+                $this->errors['password'] = 'Konfirmasi password harus sama dengan password !';
+            }
+            if (empty($this->errors)) {
+                $result = $akun->simpanAkun();
+                if (!is_object($result)) {
+                    // Send Email
+                    $link = SITE_ROOT . DS . "?url=index/link/" . $akun->getSecret() . "&email=" . $akun->getEmail();
+                    logs($link);
+                    $v = new View;
+                    $v->Assign('link', $link);
+                    $body = $v->Render('email/pendaftaran1', FALSE);
+
+                    $emailtoanggota = new Email();
+                    $emailtoanggota->to($akun->getEmail());
+                    $emailtoanggota->subject('Permintaan Pendaftaran Ulang Anggota Paskibraka');
+                    $emailtoanggota->body($body);
+                    $mc = $emailtoanggota->sendemail();
+                    logs('Mail to Anggota : ' . $mc);
+
+                    $this->Assign('successMessage', 'Permintaan berhasil. Silahkan menunggu email dari kami');
+                    $akun->setEmail('');
+                } else {
+                    $this->errors[$result->errno] = $result->error;
+                }
+            }
+        }
+        $this->Assign('errorMessage', $this->errors);
+        $this->Assign('akun', $akun);
+        $this->Load_View('pendaftaranmember');
     }
 
 
