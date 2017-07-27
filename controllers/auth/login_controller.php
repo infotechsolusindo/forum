@@ -42,7 +42,7 @@ class Login_Controller extends Controller {
         $user = new Anggota;
         $user->getProfile($userid);
         $user->getAkun();
-
+        logs('Password:' . $user->getPassword() . ' vs ' . $password);
         if ($user->getPassword() !== $password) {
             logs('Login gagal, Password salah');
             session_destroy();

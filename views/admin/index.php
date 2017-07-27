@@ -40,10 +40,10 @@
               </h2>
             </div>
             <div id="panel-juri" class="panel-body">
-              <form action="?url=admin/index/generatePenilaian" method="post" class="form form-inline">
+              <form action="?url=admin/index/generatePenilaian" method="post" class="form">
                 <div class="form-group">
-                  <label for="">Tahap</label>
                   <div class="group-item">
+                  <label for="">Tahap
                     <select name="tahap">
                       <option value="1" <?=($data['tahap'] == 1) ? 'selected' : '';?>)>1</option>
                       <option value="2" <?=($data['tahap'] == 2) ? 'selected' : '';?>>2</option>
@@ -52,10 +52,18 @@
                       <option value="5" <?=($data['tahap'] == 5) ? 'selected' : '';?>>5</option>
                       <option value="6" <?=($data['tahap'] == 6) ? 'selected' : '';?>>6</option>
                     </select>
+                  </label>
+                    <button type="submit" class="btn btn-primary">Generate Penilaian</button>
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary pull-right">Generate Penilaian</button>
               </form>
+              <hr>
+              <form action="?url=admin/index/rekapPenilaian" method="post" class="form form-inline">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Rekap Penilaian</button>
+                </div>
+              </form>
+
             </div>
           </div>
         </div>

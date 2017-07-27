@@ -134,4 +134,7 @@ class Index_Controller extends Controller {
         // var_dump($seleksi);
         $this->index();
     }
+    public function rekapPenilaian() {
+
+    }
 }
