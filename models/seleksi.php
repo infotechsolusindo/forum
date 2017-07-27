@@ -140,7 +140,7 @@ class Seleksi extends Model {
                     'tahap' => $ts->tahap,
                     'item' => $ts->item,
                     'idjuri' => $ts->juri,
-                    'idpenilaian' => (int) $penilaian[0]->id,
+                    //'idpenilaian' => (int) $penilaian[0]->id,
                 ];
                 $this->_db->create($data, 'update');
             }
