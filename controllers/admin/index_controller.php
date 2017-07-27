@@ -1,5 +1,7 @@
 <?php
 class Index_Controller extends Controller {
+    private $angkatan;
+    private $tahap;
     private $pendaftaran = [];
     public function __construct() {
         parent::__construct();
@@ -25,11 +27,16 @@ class Index_Controller extends Controller {
         $this->Assign('module_right', $module_right->Render());
         $module_banner = new Module([]);
         $this->Assign('module_banner', $module_banner->Render());
+        $sysconfig = new SysConfig;
+        $this->angkatan = $sysconfig->getIParameter('angkatan');
+        $this->tahap = $sysconfig->getIParameter('tahap');
+
     }
 
     public function index() {
         $module_main = new Module(['admin-daftarpendaftaran' /*, 'admin-daftarpeserta'*/]);
         $this->Assign('module_main', $module_main->Render());
+        $this->Assign('tahap', $this->tahap);
         $this->Load_View('admin/index');
     }
     public function formulir() {
@@ -115,5 +122,16 @@ class Index_Controller extends Controller {
         $this->Assign('dokumens', $d);
         $this->Load_View('admin/peserta-detail');
     }
-
+    public function generatePenilaian() {
+        $tahap = $_POST['tahap'];
+        $seleksi = new Seleksi;
+        if ($tahap == 1) {
+            $seleksi->getSemuaPendaftaran($this->angkatan);
+        } else {
+            $seleksi->getSemuaPendaftaran2($this->angkatan, $tahap);
+        }
+        // $this->Assign('penilaian', $seleksi->getSemuaPenilaian($this->angkatan, $_SESSION['id']));
+        // var_dump($seleksi);
+        $this->index();
+    }
 }

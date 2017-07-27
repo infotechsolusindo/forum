@@ -2,6 +2,7 @@
 class TahapanSeleksi extends Model {
     private $juri;
     private $angkatan;
+    private $tahap;
     private $daftartahapan = [];
 
     function __construct() {
@@ -13,6 +14,9 @@ class TahapanSeleksi extends Model {
     }
     public function setAngkatan($angkatan) {
         $this->angkatan = $angkatan;
+    }
+    public function setTahap($tahap) {
+        $this->tahap = $tahap;
     }
     public function tambahBerkas($tahap, $item, $deskripsi = '') {
         $daftartahapan['angkatan'] = $this->angkatan;
@@ -32,11 +36,12 @@ class TahapanSeleksi extends Model {
     public function getTahapan() {
         $juri = $this->juri;
         $angkatan = $this->angkatan;
+        $tahap = $this->tahap;
         if ($juri == '') {
             logs('Admin user/juri belum di set');
             return false;
         }
-        return $this->_db->Exec("select * from tahapanseleksi where juri = '$juri' and angkatan = $angkatan");
+        return $this->_db->Exec("select * from tahapanseleksi where juri = '$juri' and angkatan = $angkatan and tahap = $tahap");
     }
     public function getSemuaTahap($angkatan) {
         return $this->_db->Exec("select distinct tahap from tahapanseleksi where angkatan = $angkatan");

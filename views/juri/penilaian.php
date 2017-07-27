@@ -54,7 +54,6 @@
                       <?php if (isset($data['headerpenilaian'])) {foreach ($data['headerpenilaian'] as $header) {?>
                       <th><?=$header;?></th>
                       <?php }}?>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -69,20 +68,13 @@
                       <?php } else if ($k == 'nama') {?>
                         <td style=""><?=$p;?></td>
                       <?php } else if (!($k == 'id') || !($k == 'nama')) {?>
+                        <?php if ($k == 'flag') {$flag = $k;} else {?>
                         <td style="width: 80px;">
                           <input type="text" style="width:100%"  autocomplete="off" maxlength="3" name="<?=$penilaian['id'] . '_' . $k;?>" value="<?php echo $p; ?>" <?=$penilaian['flag'] == 1 ? 'disabled' : '';?>>
                         </td>
+                        <?php }?>
                       <?php }?>
                     <?php }?>
-                      <td>
-                          <label for="cek-<?=$penilaian['id'];?>">
-                            <input type="checkbox" name="cek-<?=$penilaian['id'];?>" autocomplete="off" <?=$penilaian['flag'] == 1 ? 'checked="checked" disabled' : '';?>>
-                            Hitung
-                          </label>
-                        <?php if ($penilaian['flag'] == 1) {?>
-                          <input type="hidden" name="cek-<?=$penilaian['id'];?>" value="1">
-                        <?php }?>
-                      </td>
                     </tr>
                     <?php }}?>
                   </tbody>

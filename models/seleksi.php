@@ -116,6 +116,37 @@ class Seleksi extends Model {
         }
 
     }
+    public function getSemuaPendaftaran2($angkatan, $tahap) {
+        $sql = "select * from pendaftaran where status = '1'";
+        $result = $this->_db->Exec($sql);
+        $nra = '';
+        $i = 1;
+        foreach ($result as $r) {
+            $email = $r->peserta;
+            $n = $this->_db->Exec("select * from anggota where email = '$email'");
+            $peserta = $n[0];
+            $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $tahap");
+            $this->_db->Exec("insert into penilaian value(null,0)");
+            $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
+
+            $i++;
+            foreach ($tahapanseleksi as $ts) {
+                $data = [
+                    'tgl' => date('Y-m-d'),
+                    'angkatan' => $angkatan,
+                    'idpeserta' => $peserta->nra,
+                    'jeniskelamin' => $peserta->jeniskelamin,
+                    'wilayah' => $peserta->wilayah,
+                    'tahap' => $ts->tahap,
+                    'item' => $ts->item,
+                    'idjuri' => $ts->juri,
+                    'idpenilaian' => (int) $penilaian[0]->id,
+                ];
+                $this->_db->create($data, 'update');
+            }
+        }
+        $this->_db->Exec("update _config set parmival = $tahap where parmname = 'tahap'");
+    }
     public function cekNilaiTahapSebelumnya($idpeserta, $tahap) {
         if ($tahap <= 1) {return;}
     }
@@ -161,10 +192,11 @@ class Seleksi extends Model {
             $rata = $jumlah / $total;
             logs($rata);
             $idpenilaian = $resseleksi[0]->idpenilaian;
-            return $this->_db->Exec("update penilaian set totalnilai = $rata where id = $idpenilaian");
+            return $this->_db->Exec("insert into penilaian value($idpenilaian,'$idpeserta',$rata) on duplicate key update totalnilai = $rata");
         }
     }
     public function hasilPenilaian($angkatan, $tahapan) {
+        $datatahap = [];
         foreach ($tahapan as $t) {
             $sql = "select distinct idpeserta,totalnilai from seleksi join penilaian on penilaian.id = seleksi.idpenilaian where angkatan = $angkatan and tahap = $t->tahap";
             $rtahap = $this->_db->Exec($sql);

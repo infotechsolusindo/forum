@@ -34,6 +34,30 @@
       <div class="row">
         <div id="main" class="col-md-10 col-sm-10">
           <?php echo $data['module_main']; ?>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2>Pengelolaan Penilaian
+              </h2>
+            </div>
+            <div id="panel-juri" class="panel-body">
+              <form action="?url=admin/index/generatePenilaian" method="post" class="form form-inline">
+                <div class="form-group">
+                  <label for="">Tahap</label>
+                  <div class="group-item">
+                    <select name="tahap">
+                      <option value="1" <?=($data['tahap'] == 1) ? 'selected' : '';?>)>1</option>
+                      <option value="2" <?=($data['tahap'] == 2) ? 'selected' : '';?>>2</option>
+                      <option value="3" <?=($data['tahap'] == 3) ? 'selected' : '';?>>3</option>
+                      <option value="4" <?=($data['tahap'] == 4) ? 'selected' : '';?>>4</option>
+                      <option value="5" <?=($data['tahap'] == 5) ? 'selected' : '';?>>5</option>
+                      <option value="6" <?=($data['tahap'] == 6) ? 'selected' : '';?>>6</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right">Generate Penilaian</button>
+              </form>
+            </div>
+          </div>
         </div>
         <div class="col-md-2 col-sm-2">
           <?php echo $data['module_right']; ?>

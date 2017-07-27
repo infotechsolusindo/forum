@@ -4,6 +4,7 @@
  */
 class Index_Controller extends Controller {
     private $angkatan;
+    private $tahap;
     private $juri;
     function __construct() {
         parent::__construct();
@@ -43,6 +44,11 @@ class Index_Controller extends Controller {
             $this->Load_View('error');
             die;
         }
+
+        $sysconfig = new SysConfig;
+        $this->angkatan = $sysconfig->getIParameter('angkatan');
+        $this->tahap = $sysconfig->getIParameter('tahap');
+
     }
     public function index() {
         $this->Assign('angkatan', $this->angkatan);
@@ -52,8 +58,8 @@ class Index_Controller extends Controller {
         // $juri->getAdminProfile($_SESSION['id']);
         $this->Assign('juri', $this->juri->getEmail());
         $this->Assign('namajuri', $this->juri->getNamaLengkap());
-        // $this->penilaian();
-        $this->Load_View('juri/index');
+        $this->penilaian();
+        // $this->Load_View('juri/index');
     }
     public function tampilkan() {
         $seleksi = new Seleksi;
@@ -76,8 +82,9 @@ class Index_Controller extends Controller {
         }
         $angkatan = $this->angkatan;
         $tahapan = new TahapanSeleksi;
-        $tahapan->setAngkatan($angkatan);
+        $tahapan->setAngkatan($this->angkatan);
         $tahapan->setJuri($this->juri);
+        $tahapan->setTahap($this->tahap); //Tahap seleksi yang sedang berjalan
         $items = $tahapan->getTahapan();
         $pesertas = new AnggotaFactory;
         $pesertas->setAngkatan($angkatan);
@@ -90,7 +97,7 @@ class Index_Controller extends Controller {
         foreach ($items as $i) {
             array_push($header, $i->item);
         }
-        $idtahap;
+        $idtahap = null;
         $flag = 0;
         foreach ($pesertas->getAnggotas() as $p) {
             if ($p->nra == '') {
@@ -106,7 +113,6 @@ class Index_Controller extends Controller {
                 'nmwilayah' => $w->nama,
                 'id' => $p->nra,
                 'nama' => $p->namalengkap,
-                'flag' => $flag,
             ];
             $data2 = [];
 
@@ -124,8 +130,11 @@ class Index_Controller extends Controller {
                 }
 
             }
+            $sdata1 = json_decode($p->sdata1);
 
-            $data = $data1 + $data2;
+            // var_dump($sdata1);
+            $flags = ['flag' => $flag];
+            $data = $data1 + $data2 + $flags;
             $datapenilaian[] = $data;
         }
         //sort by wilayah
@@ -159,22 +168,11 @@ class Index_Controller extends Controller {
                 continue;
             }
             $arr = explode('_', $key);
-            if (substr($arr[0], 0, 3) == 'cek') {
-                logs('masuk ke blok flagging:' . $arr[0]);
-                $cek = true;
-                $carr = explode('-', $arr[0]);
-                $idpeserta = $carr[1] . '-' . $carr[2] . '-' . $carr[3];
-            } else {
-                $idpeserta = $arr[0];
-                $item = $arr[1];
-                // var_dump($idpeserta . ':' . $angkatan . ':' . $juri . ':' . $tahap . ':' . $item . ':' . $val);
-                $seleksi->updateNilai($idpeserta, $angkatan, $juri, $tahap, $item, $val);
-            }
-            if ($cek) {
-                //logs('Update Hasil:' . $idpeserta . ' ' . $angkatan . ' ' . $tahap);
-                $seleksi->updateHasil($idpeserta, $angkatan, $tahap);
-                $cek = false;
-            }
+
+            $idpeserta = $arr[0];
+            $item = $arr[1];
+            // var_dump($idpeserta . ':' . $angkatan . ':' . $juri . ':' . $tahap . ':' . $item . ':' . $val);
+            $seleksi->updateNilai($idpeserta, $angkatan, $juri, $tahap, $item, $val);
         }
         return;
     }
