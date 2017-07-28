@@ -52,6 +52,9 @@
                       <option value="5" <?=($data['tahap'] == 5) ? 'selected' : '';?>>5</option>
                       <option value="6" <?=($data['tahap'] == 6) ? 'selected' : '';?>>6</option>
                     </select>
+                  <label for="">Kuota
+                  <input type="text" name="kuota">
+                  </label>
                   </label>
                     <button type="submit" class="btn btn-primary">Generate Penilaian</button>
                   </div>

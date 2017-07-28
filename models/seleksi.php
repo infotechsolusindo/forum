@@ -116,7 +116,7 @@ class Seleksi extends Model {
         }
 
     }
-    public function getSemuaPendaftaran2($angkatan, $tahap) {
+    public function getSemuaPendaftaran2($angkatan, $tahap, $kuota = 0) {
         $sql = "select * from pendaftaran where status = '1'";
         $result = $this->_db->Exec($sql);
         $nra = '';
@@ -125,10 +125,16 @@ class Seleksi extends Model {
             $email = $r->peserta;
             $n = $this->_db->Exec("select * from anggota where email = '$email'");
             $peserta = $n[0];
+            $this->hitungnilai($peserta->nra, $this->tahap - 1);
+        }
+        foreach ($result as $r) {
+            $email = $r->peserta;
+            $n = $this->_db->Exec("select * from anggota where email = '$email'");
+            $peserta = $n[0];
             $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $tahap");
-            $this->_db->Exec("insert into penilaian value(null,0)");
-            $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
-
+            // $this->_db->Exec("insert into penilaian value(null,0)");
+            // $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
+            $this->_db->Exec("select * from penilaian order by totalnilai desc limit $kuota");
             $i++;
             foreach ($tahapanseleksi as $ts) {
                 $data = [
@@ -146,6 +152,19 @@ class Seleksi extends Model {
             }
         }
         $this->_db->Exec("update _config set parmival = $tahap where parmname = 'tahap'");
+    }
+    private function hitungnilai($idpeserta, $tahap) {
+        $sql = "select distinct angkatan,tahap,item,idpeserta,nilai from seleksi where angkatan = $this->angkatan and tahap = $tahap order by idpeserta";
+        $result = $this->_db->Exec($sql);
+        foreach ($result as $r) {
+            $i++;
+            $total = $total + $r->nilai;
+        }
+        $rata = $total / $i;
+        $data = [
+            'idpeserta' => $idpeserta,
+            'totalnilai' => $total,
+        ];
     }
     public function cekNilaiTahapSebelumnya($idpeserta, $tahap) {
         if ($tahap <= 1) {return;}

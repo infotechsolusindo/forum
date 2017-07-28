@@ -124,17 +124,21 @@ class Index_Controller extends Controller {
     }
     public function generatePenilaian() {
         $tahap = $_POST['tahap'];
+        $kuota = $_POST['kuota'];
         $seleksi = new Seleksi;
         if ($tahap == 1) {
             $seleksi->getSemuaPendaftaran($this->angkatan);
         } else {
-            $seleksi->getSemuaPendaftaran2($this->angkatan, $tahap);
+            $seleksi->getSemuaPendaftaran2($this->angkatan, $tahap, $kuota);
         }
         // $this->Assign('penilaian', $seleksi->getSemuaPenilaian($this->angkatan, $_SESSION['id']));
         // var_dump($seleksi);
         $this->index();
     }
     public function rekapPenilaian() {
+        $sql = "select distinct angkatan,tahap,item,idpeserta,nilai from seleksi where angkatan = $this->angkatan order by idpeserta";
+        $result = $this->_db->Exec($sql);
+        "select * from pendaftaran where status = '1'";
 
     }
 }
