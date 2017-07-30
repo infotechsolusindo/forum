@@ -15,10 +15,15 @@
 <body>
 <!-- Header -->
 <div id="header">
+  <div style="position: absolute;">
+    <img src="public/assets/img/logo_paskibraka.png" alt="" style="width: 120px"/>
+  </div>
   <div class="shell">
     <!-- Logo + Top Nav -->
     <div id="top">
-      <h1><a href="#"><?php echo $data['brand']; ?></a></h1>
+      <h1>
+        <a href="#"><?php echo $data['brand']; ?></a>
+      </h1>
       <?php if (checkSession() || isset($_SESSION['id'])) {?>
       <div id="top-navigation">
         Welcome <a href="#"><strong><?php echo $data['user']; ?></strong></a>
@@ -80,6 +85,10 @@ default:
       </ul>
     </div>
     <!-- End Main Nav -->
+  </div>
+  <div style="position: absolute;top:0px;right:10px">
+    <img src="public/assets/img/dki.png" alt="" style="width: 60px"/>
+    <img src="public/assets/img/logo_ppi.png" alt="" style="width: 80px" />
   </div>
 </div>
 <!-- End Header -->

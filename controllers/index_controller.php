@@ -162,9 +162,7 @@ class Index_Controller extends Controller {
         $this->Load_View('pendaftaranmember');
     }
 
-
-
-   public function runservice(){
+    public function runservice() {
         /**
          * Worker for email service
          *   sebagai contoh untuk membuat service
@@ -189,24 +187,24 @@ class Index_Controller extends Controller {
          * Add all workers
          */
         $workers[] = $emailworker;
-	$service = new Service;
-	foreach ($workers as $worker) {
-	    $service->addWorker($worker);
-	}
+        $service = new Service;
+        foreach ($workers as $worker) {
+            $service->addWorker($worker);
+        }
 
-	for ($i=0;$i<=60;$i++) {
+        for ($i = 0; $i <= 60; $i++) {
             $starttime = time();
             $service->start();
             $endtime = time();
-            if(($endtime-$starttime)>5){
-                logs('Start at: '.$starttime);
-                logs('Stop  at: '.$endtime);
+            if (($endtime - $starttime) > 5) {
+                logs('Start at: ' . $starttime);
+                logs('Stop  at: ' . $endtime);
             }
-            if(($endtime-$starttime)>60){
+            if (($endtime - $starttime) > 60) {
                 break;
             }
-	    sleep(1);
-	}
+            sleep(1);
+        }
 
     }
 

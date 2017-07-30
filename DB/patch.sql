@@ -33,6 +33,7 @@ CREATE TABLE `artikel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1
 */
+/*
  CREATE TABLE `_config` (
       `parmname` varchar(20) NOT NULL,
       `parmival` int(11) DEFAULT NULL,
@@ -48,4 +49,24 @@ CREATE TABLE `topik` (
       PRIMARY KEY (`idtopik`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
+*/
+DROP TABLE `seleksi`;
+CREATE TABLE `seleksi` (
+      `idseleksi` int(11) NOT NULL AUTO_INCREMENT,
+      `tgl` date NOT NULL,
+      `angkatan` int(4) NOT NULL,
+      `idpeserta` varchar(10) DEFAULT NULL,
+      `jeniskelamin` enum('L','P') NOT NULL,
+      `wilayah` int(11) NOT NULL,
+      `tahap` int(11) NOT NULL,
+      `item` varchar(30) NOT NULL,
+      `nilai` int(3) DEFAULT '0',
+      `prosentase` int(3) DEFAULT '0',
+      `idjuri` varchar(50) NOT NULL,
+      `idpenilaian` int(11) DEFAULT NULL,
+      PRIMARY KEY (`idseleksi`),
+      UNIQUE KEY `idx_angkatan_tahap_item` (`angkatan`,`tahap`,`item`,`idpeserta`),
+      KEY `idx_peserta_angkatan` (`angkatan`,`idpeserta`,`jeniskelamin`),
+      KEY `idx_peserta_wilayah` (`wilayah`,`idpeserta`),
+      KEY `idx_peserta_angkatan_wilayah` (`angkatan`,`wilayah`,`idpeserta`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;

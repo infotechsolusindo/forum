@@ -199,6 +199,12 @@ class Index_Controller extends Controller {
         $this->Load_View('juri/rekap');
     }
     public function rekap() {
+        $this->Assign('angkatan', $this->angkatan);
+        $wilayah = new Wilayah;
+        $w = $wilayah->getWilayah();
+        $this->Assign('wilayah', $w);
+        $this->Assign('juri', $this->juri->getEmail());
+        $this->Assign('namajuri', $this->juri->getNamaLengkap());
         $data1 = [];
         $tahapanseleksi = new TahapanSeleksi;
         $t = $tahapanseleksi->getSemuaTahap($this->angkatan);
@@ -211,6 +217,12 @@ class Index_Controller extends Controller {
         $pesertas->setStatus('D');
         $pesertas->setSeleksi(true);
         $listpeserta = $pesertas->getAnggotas();
+        // Create Header
+        $head = [
+            'No.Peserta',
+            'Nama Peserta',
+        ];
+        // Create Data
         foreach ($listpeserta as $p) {
             $header = [
                 'nopeserta' => $p->nra,
@@ -222,8 +234,10 @@ class Index_Controller extends Controller {
                 $data[$k]['jumlah'] = array_key_exists($k, $nilai) ? (int) $nilai[$k] : 0;
                 $data[$k]['rata'] = (float) (array_key_exists($k, $nilai) ? (int) $nilai[$k] / $jmlitem : 0);
             }
-            $rekap[] = $header + $data;
+            $rekap[$p->wilayah][] = $header + $data;
         }
         $this->Assign('rekapdata', $rekap);
+        $this->Assign('tahaps', $tahaps);
+        $this->Load_View('juri/rekap');
     }
 }
