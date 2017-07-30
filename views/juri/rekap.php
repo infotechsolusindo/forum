@@ -48,7 +48,7 @@
                     <td>: <?=$data['angkatan'];?></td>
                   </tr>
                 </table>
-                <table id="form-rekap" class="table">
+                <!-- <table id="form-rekap" class="table">
                   <thead>
                     <tr>
                       <th>No.Peserta</th>
@@ -75,7 +75,7 @@
                     </tr>
                   <?php }?>
                   </tbody>
-                </table>
+                </table> -->
               </form>
               </div>
             </div>

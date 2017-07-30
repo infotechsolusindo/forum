@@ -2,8 +2,8 @@
   <div class="panel-heading">
     <h2>Daftar Peserta Seleksi</h2>
   </div>
-  <button id="btntambah" class="btn btn-success">Tambah</button>
-  <div class="panel-body">
+  <!-- <button id="btntambah" class="btn btn-success">Tambah</button> -->
+  <div class="panel-body" style="overflow-y: scroll; height: 200px;">
     <table class="table">
       <thead>
       <tr>
@@ -11,7 +11,7 @@
         <th>Email</th>
         <th>Telp</th>
         <th>Status</th>
-        <th></th>
+        <!-- <th></th> -->
       </tr>
       </thead>
       <tbody>
@@ -34,19 +34,19 @@ switch ($p->getStatus()) {
         echo "Dihapus";
         break;
     case 'D':
-        echo "Non Aktif";
+        echo "Siap Seleksi";
         break;
     default:
         echo "unknown";
         break;
     }?>
           </td>
-          <td width="200px">
+<!--           <td width="200px">
             <a href="?url=admin/index&mod=admindaftarpeserta/detail/<?php echo $p->getEmail(); ?>" class="btn btn-success btn-xs">Lihat</a>
             <a href="?url=admin/index&mod=admindaftarpeserta/block/<?php echo $p->getEmail(); ?>" class="btn btn-warning btn-xs">Block</a>
             <a href="?url=admin/index&mod=admindaftarpeserta/unblock/<?php echo $p->getEmail(); ?>" class="btn btn-success btn-xs">UnBlock</a>
             <a href="?url=admin/index&mod=admindaftarpeserta/hapus/<?php echo $p->getEmail(); ?>" class="btn btn-danger btn-xs">Hapus</a>
-          </td>
+          </td> -->
         </tr>
       <?php }?>
       </tbody>

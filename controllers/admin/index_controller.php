@@ -34,7 +34,9 @@ class Index_Controller extends Controller {
     }
 
     public function index() {
-        $module_main = new Module(['admin-daftarpendaftaran' /*, 'admin-daftarpeserta'*/]);
+        $this->Assign('angkatan', $this->angkatan);
+        $this->Assign('tahap', $this->tahap);
+        $module_main = new Module(['admin-daftarpendaftaran', 'admin-daftarpeserta']);
         $this->Assign('module_main', $module_main->Render());
         $this->Assign('tahap', $this->tahap);
         $this->Load_View('admin/index');
@@ -45,14 +47,19 @@ class Index_Controller extends Controller {
         $this->Load_View('admin/index');
     }
     public function pendaftaran($action, $data) {
+        $sysconfig = new SysConfig;
+        $lastpesertaseq = (int) $sysconfig->getIParameter('seq-peserta');
+        $nra = 'C-' . $this->angkatan . '-' . ($lastpesertaseq + 1);
         $pendaftaran = new Pendaftaran;
         switch ($action) {
         case 'terima':
             $pendaftaran->setStatus($data, '1');
             $peserta = new Peserta;
-            $peserta->getProfile($data);
+            $peserta->getProfile($data, 'D');
+            $peserta->setNRA($nra);
+            $peserta->update();
             $v = new View;
-            $v->Assign('nra', $peserta->getNRA());
+            $v->Assign('idpeserta', $peserta->getNRA());
             $v->Assign('namalengkap', $peserta->getNamaLengkap());
             $v->Assign('email', $peserta->getEmail());
             $body = $v->Render('email/otorisasipendaftaran', FALSE);
@@ -63,9 +70,9 @@ class Index_Controller extends Controller {
             $email->sendemail();
             break;
         default:
-
             break;
         }
+        $sysconfig->setIParameter('seq-peserta', $lastpesertaseq + 1);
         $this->index();
     }
     public function seleksi() {
@@ -126,11 +133,17 @@ class Index_Controller extends Controller {
         $tahap = $_POST['tahap'];
         $kuota = $_POST['kuota'];
         $seleksi = new Seleksi;
-        if ($tahap == 1) {
-            $seleksi->getSemuaPendaftaran($this->angkatan);
-        } else {
-            $seleksi->getSemuaPendaftaran2($this->angkatan, $tahap, $kuota);
+        // if ($tahap == 1) {
+        //     $seleksi->getSemuaPendaftaran($this->angkatan);
+        // } else {
+        $result = $seleksi->getSemuaPendaftaran2($this->angkatan, $tahap, $kuota);
+        if (isset($result->errorMessage)) {
+            $this->Assign('errorMessage', $result->errorMessage);
         }
+        if (isset($result->successMessage)) {
+            $this->Assign('successMessage', $result->successMessage);
+        }
+        // }
         // $this->Assign('penilaian', $seleksi->getSemuaPenilaian($this->angkatan, $_SESSION['id']));
         // var_dump($seleksi);
         $this->index();
@@ -138,7 +151,14 @@ class Index_Controller extends Controller {
     public function rekapPenilaian() {
         $sql = "select distinct angkatan,tahap,item,idpeserta,nilai from seleksi where angkatan = $this->angkatan order by idpeserta";
         $result = $this->_db->Exec($sql);
-        "select * from pendaftaran where status = '1'";
-
+        // "select * from pendaftaran where status = '1'";
+    }
+    public function setSession() {
+        $angkatan = $_POST['angkatan'];
+        $tahap = $_POST['tahap'];
+        $sysconfig = new SysConfig;
+        $sysconfig->setIParameter('angkatan', $angkatan);
+        $sysconfig->setIParameter('tahap', $tahap);
+        redirect(SITE_ROOT, 'admin/index');
     }
 }

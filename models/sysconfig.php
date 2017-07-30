@@ -17,4 +17,10 @@ class SysConfig extends Model {
         $result = $this->_db->Exec("select * from _config where parmname = '$name' limit 1");
         return $result[0]->parmsval;
     }
+    public function setIParameter($nama, $value) {
+        return $this->_db->Exec("update _config set parmival = $value where parmname = '$nama'");
+    }
+    public function setSParameter($nama, $value) {
+        return $this->_db->Exec("update _config set parmsval = '$value' where parmname = '$nama'");
+    }
 }

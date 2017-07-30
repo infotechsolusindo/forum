@@ -9,6 +9,7 @@ class AnggotaFactory extends Model {
     private $wilayah;
     private $pendidikanterakhir;
     private $angkatan;
+    private $seleksi;
     function __construct() {
         $database = DB_ENGINE;
         $this->_db = new $database;
@@ -30,6 +31,10 @@ class AnggotaFactory extends Model {
         }
         if ($this->angkatan != '') {
             $where[] = "angkatan = $this->angkatan";
+        }
+        if ($this->seleksi) {
+            $where[] = "nra like 'C-$this->angkatan%'";
+            $where[] = "sdata1 <> ''";
         }
         $options = join($where, ' and ');
         $sql = "$sql where $options";
@@ -55,6 +60,9 @@ class AnggotaFactory extends Model {
     }
     public function setAngkatan($angkatan) {
         $this->angkatan = $angkatan;
+    }
+    public function setSeleksi($seleksi) {
+        $this->seleksi = $seleksi;
     }
     public function getAnggotas() {
         $this->init();

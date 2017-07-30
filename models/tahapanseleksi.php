@@ -46,4 +46,7 @@ class TahapanSeleksi extends Model {
     public function getSemuaTahap($angkatan) {
         return $this->_db->Exec("select distinct tahap from tahapanseleksi where angkatan = $angkatan");
     }
+    public function getItemsByTahap($angkatan, $tahap) {
+        return $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $tahap");
+    }
 }

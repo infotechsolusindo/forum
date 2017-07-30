@@ -130,11 +130,7 @@ class Index_Controller extends Controller {
                 }
 
             }
-            $sdata1 = json_decode($p->sdata1);
-
-            // var_dump($sdata1);
-            $flags = ['flag' => $flag];
-            $data = $data1 + $data2 + $flags;
+            $data = $data1 + $data2;
             $datapenilaian[] = $data;
         }
         //sort by wilayah
@@ -176,7 +172,7 @@ class Index_Controller extends Controller {
         }
         return;
     }
-    public function rekap() {
+    public function rekapold() {
         $this->Assign('angkatan', $this->angkatan);
         $wilayah = new Wilayah;
         $this->Assign('wilayah', $wilayah->getWilayah());
@@ -201,5 +197,33 @@ class Index_Controller extends Controller {
         $this->Assign('datarekap', $datarekap);
         $this->Assign('pesertas', $pesertas->getAnggotas());
         $this->Load_View('juri/rekap');
+    }
+    public function rekap() {
+        $data1 = [];
+        $tahapanseleksi = new TahapanSeleksi;
+        $t = $tahapanseleksi->getSemuaTahap($this->angkatan);
+        foreach ($t as $v) {
+            $tahaps[$v->tahap] = $tahapanseleksi->getItemsByTahap($this->angkatan, $v->tahap);
+        }
+
+        $pesertas = new AnggotaFactory;
+        $pesertas->setAngkatan($this->angkatan);
+        $pesertas->setStatus('D');
+        $pesertas->setSeleksi(true);
+        $listpeserta = $pesertas->getAnggotas();
+        foreach ($listpeserta as $p) {
+            $header = [
+                'nopeserta' => $p->nra,
+                'namapeserta' => $p->namalengkap,
+            ];
+            foreach ($tahaps as $k => $v) {
+                $jmlitem = count($v);
+                $nilai = json_decode($p->sdata1, true);
+                $data[$k]['jumlah'] = array_key_exists($k, $nilai) ? (int) $nilai[$k] : 0;
+                $data[$k]['rata'] = (float) (array_key_exists($k, $nilai) ? (int) $nilai[$k] / $jmlitem : 0);
+            }
+            $rekap[] = $header + $data;
+        }
+        $this->Assign('rekapdata', $rekap);
     }
 }

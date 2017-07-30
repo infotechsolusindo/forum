@@ -47,6 +47,10 @@
                     <td>Angkatan</td>
                     <td>: <?=$data['angkatan'];?></td>
                   </tr>
+                  <tr>
+                    <td>Tahap</td>
+                    <td>: <?=$data['tahap'];?></td>
+                  </tr>
                 </table>
                 <table id="form-penilaian" class="table">
                   <thead>
@@ -68,9 +72,9 @@
                       <?php } else if ($k == 'nama') {?>
                         <td style=""><?=$p;?></td>
                       <?php } else if (!($k == 'id') || !($k == 'nama')) {?>
-                        <?php if ($k == 'flag') {$flag = $k;} else {?>
+                      <?php if ($k == 'flag') {$flag = $k;} else {?>
                         <td style="width: 80px;">
-                          <input type="text" style="width:100%"  autocomplete="off" maxlength="3" name="<?=$penilaian['id'] . '_' . $k;?>" value="<?php echo $p; ?>" <?=$penilaian['flag'] == 1 ? 'disabled' : '';?>>
+                          <input type="text" style="width:100%"  autocomplete="off" maxlength="2" name="<?=$penilaian['id'] . '_' . $k;?>" value="<?php echo $p; ?>" <?php //$penilaian['flag'] == 1 ? 'disabled' : '';;;;?>>
                         </td>
                         <?php }?>
                       <?php }?>

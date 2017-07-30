@@ -49,17 +49,16 @@ class Seleksi extends Model {
         // $juri = $admin->getEmail();
         $sql = "select * from pendaftaran where status = '1'";
         $result = $this->_db->Exec($sql);
-        $nra = '';
         $i = 1;
         foreach ($result as $r) {
             $this->_db->Exec("insert into penilaian value(null,0)");
-            $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
+            // $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
             $peserta = new Peserta;
             $peserta->getProfile($r->peserta, 'D', 's');
             $email = $peserta->getEmail();
-            if ($peserta->getnra() != '') {
-                continue;
-            }
+            // if ($peserta->getnra() != '') {
+            //     continue;
+            // }
             if ($peserta->getWewenang() != 's') {
                 continue;
             }
@@ -85,20 +84,20 @@ class Seleksi extends Model {
             // if (!empty($cekStatusSeleksi)) {
             //     continue;
             // }
-            $query = $this->_db->Exec("select max(nra) as maxnra from anggota where nra like 'C-$angkatan-%' ");
-            $lastid = !is_null($query) ? $query[0]->maxnra : false;
-            logs('peserta:' . $email . ' lastid:' . $lastid);
-            if (!$lastid) {
-                $idxnra = 1;
-            } else {
-                $idxnra = explode('-', $lastid)[2];
-                $idxnra++;
-            }
-            $nra = 'C-' . $angkatan . '-' . $idxnra;
+            // $query = $this->_db->Exec("select max(nra) as maxnra from anggota where nra like 'C-$angkatan-%' ");
+            // $lastid = !is_null($query) ? $query[0]->maxnra : false;
+            // logs('peserta:' . $email . ' lastid:' . $lastid);
+            // if (!$lastid) {
+            //     $idxnra = 1;
+            // } else {
+            //     $idxnra = explode('-', $lastid)[2];
+            //     $idxnra++;
+            // }
+            // $nra = 'C-' . $angkatan . '-' . $idxnra;
             $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $_POST[tahap]");
 
             $i++;
-            $this->_db->Exec("update anggota set nra = '$nra' where email = '$email'");
+            // $this->_db->Exec("update anggota set nra = '$nra' where email = '$email'");
             foreach ($tahapanseleksi as $ts) {
                 $data = [
                     'tgl' => date('Y-m-d'),
@@ -116,55 +115,66 @@ class Seleksi extends Model {
         }
 
     }
-    public function getSemuaPendaftaran2($angkatan, $tahap, $kuota = 0) {
-        $sql = "select * from pendaftaran where status = '1'";
-        $result = $this->_db->Exec($sql);
-        $nra = '';
-        $i = 1;
-        foreach ($result as $r) {
-            $email = $r->peserta;
-            $n = $this->_db->Exec("select * from anggota where email = '$email'");
-            $peserta = $n[0];
-            $this->hitungnilai($peserta->nra, $this->tahap - 1);
+    public function getSemuaPendaftaran2($angkatan, $tahap, $kuota) {
+        $sql = "select anggota.email,anggota.nra,anggota.jeniskelamin,anggota.wilayah,anggota.sdata1 as rekapnilai from pendaftaran join anggota on anggota.email = pendaftaran.peserta where pendaftaran.status = '1'";
+        $result1 = $this->_db->Exec($sql);
+        $i = 0;
+        logs('angkatan:' . $angkatan);
+        logs('tahap:' . $tahap);
+        $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $tahap");
+        if ($tahap > 1) {
+            if ($kuota < 1) {return (Object) ['errorMessage' => 'Kuota belum terisi'];}
+            foreach ($result1 as $r) {
+                logs('do:' . $r->nra);
+                $this->hitungnilai($r->nra, $angkatan, $tahap - 1, $r->rekapnilai);
+            }
+            $result2 = $this->_db->Exec("select anggota.email,anggota.nra,anggota.jeniskelamin,anggota.wilayah,penilaian.totalnilai from penilaian join anggota on anggota.nra = penilaian.idpeserta order by totalnilai desc limit $kuota");
+            $arrpesertalolos = [];
+            foreach ($result2 as $r) {
+                $arrpesertalolos[] = $r->email;
+            }
+            foreach ($result1 as $p) {
+                if (in_array($p->email, $arrpesertalolos)) {continue;}
+                $this->_db->Exec("update pendaftaran set status = '2' where peserta = '$p->email'");
+                $this->_db->Exec("delete from penilaian where idpeserta = '$p->nra'");
+            }
+
         }
-        foreach ($result as $r) {
-            $email = $r->peserta;
-            $n = $this->_db->Exec("select * from anggota where email = '$email'");
-            $peserta = $n[0];
-            $tahapanseleksi = $this->_db->Exec("select * from tahapanseleksi where angkatan = $angkatan and tahap = $tahap");
+
+        foreach ($result2 as $r) {
             // $this->_db->Exec("insert into penilaian value(null,0)");
             // $penilaian = $this->_db->Exec("select last_insert_id() as id from penilaian limit 1");
-            $this->_db->Exec("select * from penilaian order by totalnilai desc limit $kuota");
             $i++;
             foreach ($tahapanseleksi as $ts) {
                 $data = [
                     'tgl' => date('Y-m-d'),
                     'angkatan' => $angkatan,
-                    'idpeserta' => $peserta->nra,
-                    'jeniskelamin' => $peserta->jeniskelamin,
-                    'wilayah' => $peserta->wilayah,
+                    'idpeserta' => $r->nra,
+                    'jeniskelamin' => $r->jeniskelamin,
+                    'wilayah' => $r->wilayah,
                     'tahap' => $ts->tahap,
                     'item' => $ts->item,
                     'idjuri' => $ts->juri,
-                    //'idpenilaian' => (int) $penilaian[0]->id,
                 ];
                 $this->_db->create($data, 'update');
             }
         }
-        $this->_db->Exec("update _config set parmival = $tahap where parmname = 'tahap'");
+        return (Object) ['successMessage' => "Berhasil generate $i penilaian untuk tahap $tahap"];
     }
-    private function hitungnilai($idpeserta, $tahap) {
-        $sql = "select distinct angkatan,tahap,item,idpeserta,nilai from seleksi where angkatan = $this->angkatan and tahap = $tahap order by idpeserta";
-        $result = $this->_db->Exec($sql);
-        foreach ($result as $r) {
-            $i++;
-            $total = $total + $r->nilai;
+    private function hitungnilai($idpeserta, $angkatan, $tahap, $rekapnilai = null) {
+        $arrnilai = json_decode($rekapnilai, true);
+        if (!is_array($arrnilai)) {
+            $arrnilai = [];
         }
-        $rata = $total / $i;
-        $data = [
-            'idpeserta' => $idpeserta,
-            'totalnilai' => $total,
-        ];
+        $sql = "select sum(nilai) as total from seleksi where angkatan = $angkatan and tahap = $tahap and idpeserta = '$idpeserta'";
+        $result = $this->_db->Exec($sql);
+        $total = $result[0]->total;
+        $arr[$tahap] = $total;
+        $arrnilai = $arrnilai + $arr;
+        $sdata = json_encode($arrnilai);
+        $this->_db->Exec("update anggota set sdata1 = '$sdata' where nra = '$idpeserta'");
+        $this->_db->Exec("insert into penilaian(idpeserta,totalnilai) value('$idpeserta',$total)  on duplicate key update totalnilai = $total");
+        return;
     }
     public function cekNilaiTahapSebelumnya($idpeserta, $tahap) {
         if ($tahap <= 1) {return;}
@@ -188,7 +198,7 @@ class Seleksi extends Model {
         $this->juri[$juri->getTugasJuri()] = $juri;
     }
     public function getPesertas($status) {
-        $pesertas = $this->_db->Exec("select * from anggota where status = '$status'");
+        $pesertas = $this->_db->Exec("select peserta as email from pendaftaran where status = '1'");
         foreach ($pesertas as $p) {
             $peserta = new Peserta;
             $peserta->getProfile($p->email, $status);
