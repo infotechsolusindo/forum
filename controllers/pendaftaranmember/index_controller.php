@@ -2,7 +2,7 @@
 class Index_Controller extends Controller {
     private $errors = [];
     private $success;
-    private $peserta;
+    private $anggota;
     public function __construct() {
         parent::__construct();
         $header = new View();
@@ -51,13 +51,13 @@ class Index_Controller extends Controller {
         }
     }
 
-    private function step1(Peserta $peserta) {
+    private function step1(Anggota $anggota) {
         if (isset($_GET['cmd']) == 'save') {
             // Validation
             // Cek email tidak valid
             $akun = new Akun;
             $akun->setEmail($_POST['email']);
-            if (!$akun->getAkun('p')) {
+            if (!$akun->getAkun('n')) {
                 $this->Assign('error', 'Maaf data Anda tidak ditemukan. Mungkin Anda belum mendaftar');
                 $this->Load_View('error');
                 return;
@@ -85,30 +85,31 @@ class Index_Controller extends Controller {
             $this->Assign('wilayahselect', $_POST['wilayah']);
             $this->Assign('pendidikanterakhirselect', $_POST['pendidikanterakhir']);
             //Jika tidak ada error
-            $peserta->setEmail($_POST['email']);
-            // $peserta->setNRA($_POST['nra']);
-            $peserta->setNamaPanggilan($_POST['namapanggilan']);
-            $peserta->setNamaLengkap($_POST['namalengkap']);
-            $peserta->setAngkatan(date('Y')); // Angkatan dikunci berdasarkan tahun sekarang
-            $peserta->setJenisKelamin($_POST['jeniskelamin']);
-            $peserta->setTempatLahir($_POST['tempatlahir']);
-            $peserta->setTglLahir($_POST['tgllahir']);
-            $peserta->setNomerPonsel($_POST['telp']);
-            $peserta->setAlamatDomisili($_POST['alamatdomisili']);
-            $peserta->setWilayah($_POST['wilayah']);
-            $peserta->setPendidikanTerakhir($_POST['pendidikanterakhir']);
-            // $peserta->setPekerjaan($_POST['pekerjaan']);
-            $peserta->setInstitusi($_POST['institusi']);
-            // $peserta->setJabatan($_POST['jabatan']);
-            $peserta->setFoto($fotofile);
+            $anggota->setEmail($_POST['email']);
+            // $anggota->setNRA($_POST['nra']);
+            $anggota->setNamaPanggilan($_POST['namapanggilan']);
+            $anggota->setNamaLengkap($_POST['namalengkap']);
+            $anggota->setAngkatan(date('Y')); // Angkatan dikunci berdasarkan tahun sekarang
+            $anggota->setJenisKelamin($_POST['jeniskelamin']);
+            $anggota->setTempatLahir($_POST['tempatlahir']);
+            $anggota->setTglLahir($_POST['tgllahir']);
+            $anggota->setNomerPonsel($_POST['telp']);
+            $anggota->setAlamatDomisili($_POST['alamatdomisili']);
+            $anggota->setWilayah($_POST['wilayah']);
+            $anggota->setPendidikanTerakhir($_POST['pendidikanterakhir']);
+            // $anggota->setPekerjaan($_POST['pekerjaan']);
+            $anggota->setInstitusi($_POST['institusi']);
+            // $anggota->setJabatan($_POST['jabatan']);
+            $anggota->setFoto($fotofile);
             if (empty($this->errors)) {
                 logs('Tidak ada error, proses request');
-                $result = $peserta->simpanAnggota();
+                $anggota->setStatus('M');
+                $result = $anggota->simpanAnggota();
                 if (is_object($result) && isset($result->error)) {
                     $this->errors[] = $result->error;
-                    $peserta->getProfile($_POST['email'], 'D');
+                    $anggota->getProfile($_POST['email'], 'M');
                 } else {
-                    $this->peserta = $peserta;
+                    $this->anggota = $anggota;
                     return $this->step2();
                 }
             }
@@ -120,112 +121,38 @@ class Index_Controller extends Controller {
         $wilayah = new Wilayah;
         $this->Assign('wilayah', $wilayah->getWilayah());
         $this->Assign('errorMessage', $this->errors);
-        $this->Assign('peserta', $peserta);
-        $this->Load_View('pendaftaran/step1');
+        $this->Assign('member', $anggota);
+        $this->Load_View('pendaftaranmember/step1');
     }
 
     private function step2() {
-        $dokumens = [];
-        if (isset($_GET['cmd']) && $_GET['cmd'] == 'save2') {
-            $pendaftaran = new Pendaftaran();
-            $pendaftaran->tambahPeserta($this->peserta);
-            $i = 1;
-            foreach ($_FILES['berkas']['name'] as $key => $name) {
-                $berkas[$key]['name'] = trim($name);
-            }
-            $i = 1;
-            foreach ($_FILES['berkas']['type'] as $key => $type) {
-                $berkas[$key]['type'] = $type;
-                $i++;
-            }
-            $i = 1;
-            foreach ($_FILES['berkas']['tmp_name'] as $key => $tmpname) {
-                $berkas[$key]['tmpname'] = $tmpname;
-                $i++;
-            }
-            $i = 1;
-            foreach ($_FILES['berkas']['error'] as $key => $error) {
-                $berkas[$key]['error'] = $error;
-                $i++;
-            }
-            $i = 1;
-            foreach ($_FILES['berkas']['size'] as $key => $size) {
-                $berkas[$key]['size'] = $size;
-                $i++;
-            }
-            foreach ($berkas as $key => $b) {
-                if ($b['name'] == '') {
-                    continue;
-                }
-                if (strlen($b['name']) > 30) {
-                    $this->errors[] = "Nama file berkas $key terlalu panjang ($b[name])";
-                    continue;
-                }
-                $file_name = $b['name'];
-                $arrfile = explode('.', $file_name);
-                $file_ext = strtolower(end($arrfile));
-                $file_tmp = $b['tmpname'];
-                $fullpath = ROOT . '/public/data/berkas/' . md5($this->peserta->getEmail()) . '-file-' . $key . '.' . $file_ext;
-                move_uploaded_file($file_tmp, $fullpath);
-
-                $dokumen = new Dokumen;
-                $dokumen->setTipe($key);
-                $dokumen->setJudul($_POST['judulfile'][$key]);
-                $dokumen->setDeskripsi($_POST['deskripsifile'][$key]);
-                $dokumen->setNamaFile($file_name);
-                $dokumen->setFile($fullpath);
-                $pendaftaran->tambahdokumen($dokumen);
-            }
-            $result = $pendaftaran->simpanPendaftaran();
-            foreach ($result as $r) {
-                $this->errors[$r->errno] = $r->error;
-            }
-        }
-        $angkatan = date('Y');
-        $daftar = new DaftarDokumen;
-        $daftars = $daftar->getDaftar($angkatan);
-        $dok = $this->peserta->getDokumens();
-        foreach ($dok as $d) {
-            $dokumens[$d->tipe] = $d;
-        }
-        if (empty($result) && (count($dok) == count($daftars))) {
-            logs('Data sudah komplit, lanjut ke step3');
-            return $this->step3();
-        }
-        $this->Assign('daftar', $daftars);
-        $this->Assign('dokumen', $dokumens);
-        $this->Assign('errorMessage', $this->errors);
-        $this->Load_View('pendaftaran/step2');
-    }
-
-    private function step3() {
-        if ($this->peserta->getWewenang() == 'p') {
-            $this->peserta->setWewenang('s');
-            $this->peserta->update();
-            // var_dump($this->peserta);
+        if ($this->anggota->getWewenang() == 'n') {
+            $this->anggota->setWewenang('n2');
+            $this->anggota->update();
+            // var_dump($this->anggota);
             $v = new View;
             $body = $v->Render('email/pendaftaran2', FALSE);
-            $emailtopeserta = new Email();
-            $emailtopeserta->to($this->peserta->getEmail());
-            $emailtopeserta->subject('Panita Pendaftaran peserta');
-            $emailtopeserta->body($body);
-            $emailtopeserta->sendemail();
+            $emailtoanggota = new Email();
+            $emailtoanggota->to($this->anggota->getEmail());
+            $emailtoanggota->subject('Panita Pendaftaran anggota');
+            $emailtoanggota->body($body);
+            $emailtoanggota->sendemail();
 
-            $nrapeserta = $this->peserta->getNRA();
-            $namalengkappeserta = $this->peserta->getNamaLengkap();
-            $emailpeserta = $this->peserta->getEmail();
-            $v->Assign('nra', $nrapeserta);
-            $v->Assign('email', $emailpeserta);
-            $v->Assign('namalengkap', $namalengkappeserta);
+            $nraanggota = $this->anggota->getNRA();
+            $namalengkapanggota = $this->anggota->getNamaLengkap();
+            $emailanggota = $this->anggota->getEmail();
+            $v->Assign('nra', $nraanggota);
+            $v->Assign('email', $emailanggota);
+            $v->Assign('namalengkap', $namalengkapanggota);
             $body = $v->Render('email/pendaftaran2admin', FALSE);
             $emailtoadmin = new Email();
             $emailtoadmin->to(MAIL_ADMIN);
-            $emailtoadmin->subject('Pendaftaran peserta Baru');
+            $emailtoadmin->subject('Pendaftaran ulang anggota lama');
             $emailtoadmin->body($body);
             $send = $emailtoadmin->sendemail();
             logs($send);
         }
-        $this->Load_View('pendaftaran/step3');
+        $this->Load_View('pendaftaran/stepmember2');
     }
 
     public function dokumen($action, $id) {

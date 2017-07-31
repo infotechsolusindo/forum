@@ -43,7 +43,10 @@ class Akun extends Model {
 
     }
 
-    public function simpanAkun($data = null) {
+    public function simpanAkun($data = null, $member = false) {
+        if ($member) {
+            $data['wewenang'] = 'm';
+        }
         $data['created'] = date('Y-m-d h:m:s');
         $data['email'] = $this->email;
         $data['password'] = md5($this->password);
@@ -84,12 +87,24 @@ class Akun extends Model {
             return true;
         } else {return false;}
     }
+
+    public function getSecret2() {
+        $sec = $this->_db->Exec("select * from akun where email = '$this->email' and wewenang = 'm'");
+        return md5($sec[0]->email . $sec[0]->password . $sec[0]->lastmodify);
+    }
+    public function checkSecret2($secret) {
+        if ($this->getSecret2() === $secret) {
+            $this->_db->Exec("update akun set wewenang = 'n', lastmodify = CURRENT_TIMESTAMP where email = '$this->email' and wewenang = 'm'");
+            return true;
+        } else {return false;}
+    }
+
     public function generateAkun() {
         $sql = "select * from anggota where status = 'A'";
         $result = $this->_db->Exec($sql);
         $sql = "";
         foreach ($result as $r) {
-            logs('Create: '.$r->email);
+            logs('Create: ' . $r->email);
             $sql = "insert ignore into akun(email,password,wewenang,created) value('$r->email',md5('123'),'0',now())";
             $result = $this->_db->Exec($sql);
         }

@@ -36,7 +36,7 @@ class Index_Controller extends Controller {
     public function index() {
         $this->Assign('angkatan', $this->angkatan);
         $this->Assign('tahap', $this->tahap);
-        $module_main = new Module(['admin-daftarpendaftaran', 'admin-daftarpeserta']);
+        $module_main = new Module(['admin-daftarpendaftaran', 'admin-daftarpeserta', 'admin-daftarulang']);
         $this->Assign('module_main', $module_main->Render());
         $this->Assign('tahap', $this->tahap);
         $this->Load_View('admin/index');
@@ -47,12 +47,12 @@ class Index_Controller extends Controller {
         $this->Load_View('admin/index');
     }
     public function pendaftaran($action, $data) {
-        $sysconfig = new SysConfig;
-        $lastpesertaseq = (int) $sysconfig->getIParameter('seq-peserta');
-        $nra = 'C-' . $this->angkatan . '-' . ($lastpesertaseq + 1);
-        $pendaftaran = new Pendaftaran;
         switch ($action) {
         case 'terima':
+            $sysconfig = new SysConfig;
+            $lastpesertaseq = (int) $sysconfig->getIParameter('seq-peserta');
+            $nra = 'C-' . $this->angkatan . '-' . ($lastpesertaseq + 1);
+            $pendaftaran = new Pendaftaran;
             $pendaftaran->setStatus($data, '1');
             $peserta = new Peserta;
             $peserta->getProfile($data, 'D');
@@ -68,11 +68,25 @@ class Index_Controller extends Controller {
             $email->subject('Pendaftaran peserta Baru');
             $email->body($body);
             $email->sendemail();
+            $sysconfig->setIParameter('seq-peserta', $lastpesertaseq + 1);
+            break;
+        case 'daftarulang':
+            $anggota = new Anggota;
+            $anggota->getProfile($data, 'M');
+            $anggota->setWewenang('0');
+            $anggota->setStatus('A');
+            $anggota->update();
+            $anggota->simpanAkun();
+            $body = $v->Render('email/otorisasipendaftaran2', FALSE);
+            $email = new Email();
+            $email->to($data);
+            $email->subject('Pendaftaran Ulang Diterima');
+            $email->body($body);
+            $email->sendemail();
             break;
         default:
             break;
         }
-        $sysconfig->setIParameter('seq-peserta', $lastpesertaseq + 1);
         $this->index();
     }
     public function seleksi() {
@@ -129,6 +143,60 @@ class Index_Controller extends Controller {
         $this->Assign('dokumens', $d);
         $this->Load_View('admin/peserta-detail');
     }
+    public function lihatAnggota($id) {
+        $jk = '';
+        $status = '';
+        $module_main = new Module();
+        $this->Assign('module_main', $module_main->Render());
+        $anggota = new Anggota;
+        $anggota->getProfile($id, 'M', 'n');
+        $this->Assign('namalengkap', $anggota->getnamalengkap());
+        $this->Assign('alamatdomisili', $anggota->getalamatdomisili());
+        $this->Assign('email', $anggota->getemail());
+        $this->Assign('tgllahir', $anggota->gettgllahir());
+        $this->Assign('foto', $anggota->getfoto());
+        $this->Assign('nra', $anggota->getnra());
+        $this->Assign('angkatan', $anggota->getangkatan());
+        switch ($anggota->getJenisKelamin()) {
+        case 'L':
+            $jk = 'Laki - laki';
+            break;
+        case 'P':
+            $jk = 'Perempuan';
+            break;
+        }
+        $this->Assign('jeniskelamin', $jk);
+        $this->Assign('tempatlahir', $anggota->gettempatlahir());
+        $this->Assign('nomerponsel', $anggota->getnomerponsel());
+        $wilayah = new Wilayah;
+        $w = $wilayah->getwilayah($anggota->getwilayah());
+        $this->Assign('wilayah', $w[0]->nama);
+        $this->Assign('pendidikanterakhir', $anggota->getpendidikanterakhir());
+        $this->Assign('pekerjaan', $anggota->getpekerjaan());
+        $this->Assign('institusi', $anggota->getinstitusi());
+        $this->Assign('jabatan', $anggota->getjabatan());
+        switch ($anggota->getstatus()) {
+        case 'A':
+            $status = 'Aktif';
+            break;
+        case 'B':
+            $status = 'Di Block';
+            break;
+        case 'C':
+            $status = 'Batal / di Hapus';
+            break;
+        case 'D':
+            $status = 'Belum Aktif';
+            break;
+        }
+        $this->Assign('status', $status);
+
+        // $dokumens = new Dokumen;
+        // $d = $dokumens->getDokumens($anggota->getEmail());
+        // $this->Assign('dokumens', $d);
+        $this->Load_View('admin/anggota-detail');
+    }
+
     public function generatePenilaian() {
         $tahap = $_POST['tahap'];
         $kuota = $_POST['kuota'];

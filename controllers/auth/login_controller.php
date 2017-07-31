@@ -40,8 +40,18 @@ class Login_Controller extends Controller {
         }
 
         $user = new Anggota;
-        $user->getProfile($userid);
+        $user->setEmail($userid);
         $user->getAkun();
+        if (is_numeric($user->getWewenang()) && $user->getWewenang() >= 0) {
+            $user->getProfile($userid);
+        } else if ($user->getWewenang() == 'n') {
+            logs('Non-Aktif member, need re-registration');
+            //$user->getProfile($userid, 'n');
+        } else {
+            logs('wewenang user tidak sah');
+            session_destroy();
+            redirect(SITE_ROOT, 'index');
+        }
         logs('Password:' . $user->getPassword() . ' vs ' . $password);
         if ($user->getPassword() !== $password) {
             logs('Login gagal, Password salah');
@@ -86,6 +96,10 @@ class Login_Controller extends Controller {
             var_dump($pendaftaran->getPendaftaran($user));
             $_SESSION['id'] = $user->getEmail();
             $_SESSION['privileges'] = empty($pendaftaran->getPendaftaran($user)) ? 'pendaftaran' : 'seleksi';
+            break;
+        case 'n': //Member non-aktif
+            $_SESSION['id'] = $user->getEmail();
+            $_SESSION['privileges'] = 'pendaftaranmember';
             break;
         case '0': //Anggota
             $_SESSION['id'] = $user->getEmail();

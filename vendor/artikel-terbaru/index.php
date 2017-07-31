@@ -20,7 +20,7 @@
 						<td><img src="<?php echo $artikel->gambar; ?>" style="width:100px;height:100px;padding-bottom: 2px;padding-right: 2px"></td>
 						<td>
 							<p><?php echo $artikel->isipendek; ?></p>
-							<a href="?url=artikel/index/<?php echo $artikel->id; ?>">Baca Selengkapnya</a>
+							<a href="?url=anggota/artikel/index/<?php echo $artikel->id; ?>">Baca Selengkapnya</a>
 						</td>
 					</tr>
 				</table>

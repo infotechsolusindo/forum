@@ -47,6 +47,13 @@ class Pendaftaran extends Model {
             "where pendaftaran.status = '0' ";
         return $this->_db->Exec($sql);
     }
+    public function getPendaftaranUlang() {
+        $sql = "select anggota.*,akun.* " .
+            "from anggota " .
+            "inner join akun on akun.email = anggota.email " .
+            "where anggota.status = 'M' and akun.wewenang = 'n' ";
+        return $this->_db->Exec($sql);
+    }
     public function setStatus($peserta, $status) {
         return $this->_db->Exec("update pendaftaran set status = '$status' where peserta = '$peserta'");
     }

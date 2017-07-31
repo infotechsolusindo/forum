@@ -59,6 +59,18 @@ class Index_Controller extends Controller {
             $this->Load_View('error');
         }
     }
+    public function link2($secret) {
+        $akun = new Akun;
+        $akun->setEmail($_GET['email']);
+        if ($akun->checkSecret2($secret)) {
+            logs('Link member benar');
+            $_SESSION['email'] = $akun->getEmail();
+            $this->pendaftaran2($akun->getEmail());
+        } else {
+            session_destroy();
+            $this->Load_View('error');
+        }
+    }
 
     public function pendaftaran1() {
         $akun = new Akun;
@@ -134,10 +146,10 @@ class Index_Controller extends Controller {
                 $this->errors['password'] = 'Konfirmasi password harus sama dengan password !';
             }
             if (empty($this->errors)) {
-                $result = $akun->simpanAkun();
+                $result = $akun->simpanAkun(null, true);
                 if (!is_object($result)) {
                     // Send Email
-                    $link = SITE_ROOT . DS . "?url=index/link/" . $akun->getSecret() . "&email=" . $akun->getEmail();
+                    $link = SITE_ROOT . DS . "?url=index/link2/" . $akun->getSecret2() . "&email=" . $akun->getEmail();
                     logs($link);
                     $v = new View;
                     $v->Assign('link', $link);
